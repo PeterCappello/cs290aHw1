@@ -22,9 +22,12 @@
  * THE SOFTWARE.
  */
 package client;
+import api.Computer;
+import api.Task;
+import computer.ComputerImpl;
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.Dimension;
+import java.rmi.RemoteException;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -32,21 +35,41 @@ import javax.swing.JScrollPane;
 /**
  *
  * @author Peter Cappello
+ * @param <T> return type of runTask method
  */
-public class Client extends JFrame
+public class Client<T> extends JFrame
 {
-    Client( String title ) 
-    {        
+    final protected Task task;
+    final private   Computer computer;
+          protected T taskReturnValue;
+    
+    public Client( String title, Task task ) throws RemoteException
+    {     
+        this.task = task;
         setTitle( title );
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        
+        final String domainName = "localhost";
+        final String url = "rmi://" + domainName + ":" + Computer.PORT + "/" + Computer.SERVICE_NAME;
+        computer = new ComputerImpl(); //(Computer) Naming.lookup( url );
     }
     
-    void add( JLabel jLabel )
+    public void add( JLabel jLabel )
     {
         Container container = getContentPane();
         container.setLayout( new BorderLayout() );
         container.add( new JScrollPane( jLabel ), BorderLayout.CENTER );
         pack();
         setVisible( true );
+    }
+    
+    public  T runTask() throws RemoteException
+    {
+        computer.execute( task );
+        final long startTime = System.nanoTime();
+        final T value = (T) computer.execute( task );
+        final long runTime = ( System.nanoTime() - startTime ) / 1000000;
+        System.out.println( task + "\n\t runtime: " + runTime + " ms.");
+        return value;
     }
 }

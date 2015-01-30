@@ -22,8 +22,13 @@
  * THE SOFTWARE.
  */
 package client;
-import api.Computer;
-import computer.ComputerImpl;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.rmi.RemoteException;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import tasks.TaskMandelbrotSet;
 
 /**
@@ -38,7 +43,11 @@ public class ClientMandelbrotSet extends Client
     private static final int N_PIXELS = 512;
     private static final int ITERATION_LIMIT = 128;
     
-    public ClientMandelbrotSet() { super( "Mandelbrot Set Visualizer" ); }
+    public ClientMandelbrotSet() throws RemoteException 
+    { 
+        super( "Mandelbrot Set Visualizer", 
+                new TaskMandelbrotSet( LOWER_LEFT_X, LOWER_LEFT_Y, EDGE_LENGTH, N_PIXELS, ITERATION_LIMIT) ); 
+    }
     
     /**
      * Run the MandelbrotSet visualizer client.
@@ -48,21 +57,32 @@ public class ClientMandelbrotSet extends Client
     public static void main( String[] args ) throws Exception
     {  
         System.setSecurityManager( new SecurityManager() );
-        
-        final Client client = new ClientMandelbrotSet();
-        
-        final String domainName = "localhost";
-        final String url = "rmi://" + domainName + ":" + Computer.PORT + "/" + Computer.SERVICE_NAME;
-        final Computer computer = new ComputerImpl(); //(Computer) Naming.lookup( url );
-        
-        final TaskMandelbrotSet task = new TaskMandelbrotSet( LOWER_LEFT_X, LOWER_LEFT_Y, EDGE_LENGTH, N_PIXELS, ITERATION_LIMIT);
-        
-        // run task twice; report the 2nd execution time
-        computer.execute( task );
-        final long startTime = System.nanoTime();
-        final int[][] counts = (int[][]) computer.execute( task );
-        System.out.println( task + "\n\t runtime: " + ( ( System.nanoTime() - startTime ) / 1000000.0 ) + " ms.");
-        
-        client.add( task.getLabel( counts ) );
+        final ClientMandelbrotSet client = new ClientMandelbrotSet();
+        Integer[][] value = (Integer[][]) client.runTask();
+        client.add( client.getLabel( value ) );
+    }
+    
+    public JLabel getLabel( Integer[][] counts )
+    {
+        final Image image = new BufferedImage( N_PIXELS, N_PIXELS, BufferedImage.TYPE_INT_ARGB );
+        final Graphics graphics = image.getGraphics();
+        for ( int i = 0; i < counts.length; i++ )
+            for ( int j = 0; j < counts.length; j++ )
+            {
+                graphics.setColor( getColor( counts[i][j] ) );
+                graphics.fillRect( i, j, 1, 1 );
+            }
+        final ImageIcon imageIcon = new ImageIcon( image );
+        return new JLabel( imageIcon );
+    }
+    
+    
+    private Color getColor( int i )
+    {
+        if ( i == ITERATION_LIMIT )
+        {
+            return Color.BLACK;
+        }
+        return new Color( i % ITERATION_LIMIT, 0, ( ITERATION_LIMIT - i ) % ITERATION_LIMIT ); 
     }
 }

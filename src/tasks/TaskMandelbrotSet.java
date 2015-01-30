@@ -23,18 +23,12 @@
  */
 package tasks;
 import api.Task;
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 /**
  *
  * @author Peter Cappello
  */
-public class TaskMandelbrotSet implements Task
+public class TaskMandelbrotSet implements Task<Integer[][]>
 {
     private final double lowerLeftX;
     private final double lowerLeftY;
@@ -52,9 +46,9 @@ public class TaskMandelbrotSet implements Task
     }
     
     @Override
-    public Object execute() 
+    public Integer[][] execute() 
     {
-        final int[][] counts = new int[numPixels][numPixels];
+        final Integer[][] counts = new Integer[numPixels][numPixels];
         for ( int row = 0; row < numPixels; row++ )
             for ( int col = 0; col < numPixels; col++ )
             {
@@ -68,28 +62,5 @@ public class TaskMandelbrotSet implements Task
     {
         return String.format( "%s \n\t x: %e \n\t y: %e \n\t length: %e \n\t pixels: %d \n\t iteration limit: %d", 
                 getClass(), lowerLeftX, lowerLeftY, edgeLength, numPixels, iterationLimit );
-    }
-    
-    public JLabel getLabel( int[][] counts )
-    {
-        final Image image = new BufferedImage( numPixels, numPixels, BufferedImage.TYPE_INT_ARGB );
-        final Graphics graphics = image.getGraphics();
-        for ( int i = 0; i < counts.length; i++ )
-            for ( int j = 0; j < counts.length; j++ )
-            {
-                graphics.setColor( getColor( counts[i][j] ) );
-                graphics.fillRect( i, j, 1, 1 );
-            }
-        final ImageIcon imageIcon = new ImageIcon( image );
-        return new JLabel( imageIcon );
-    }
-
-    private Color getColor( int i )
-    {
-        if ( i == iterationLimit )
-        {
-            return Color.BLACK;
-        }
-        return new Color( i % iterationLimit, 0, ( iterationLimit - i ) % iterationLimit ); 
     }
 }
