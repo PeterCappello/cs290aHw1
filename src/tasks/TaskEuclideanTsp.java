@@ -24,11 +24,6 @@
 package tasks;
 
 import api.Task;
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-import javax.swing.ImageIcon;
-import javax.swing.JLabel;
 
 /**
  *
@@ -60,19 +55,5 @@ public class TaskEuclideanTsp implements Task<int[]>
             stringBuilder.append( cities[ city ][ 1 ] ).append("\n\t");
         }
         return stringBuilder.toString();
-    }
-    
-    public JLabel getLabel( Integer[][] counts )
-    {
-        final Image image = new BufferedImage( NUM_PIXELS, NUM_PIXELS, BufferedImage.TYPE_INT_ARGB );
-        final Graphics graphics = image.getGraphics();
-//        for ( int i = 0; i < counts.length; i++ )
-//            for ( int j = 0; j < counts.length; j++ )
-//            {
-//                graphics.setColor( getColor( counts[i][j] ) );
-//                graphics.fillRect( i, j, 1, 1 );
-//            }
-        final ImageIcon imageIcon = new ImageIcon( image );
-        return new JLabel( imageIcon );
     }
 }
