@@ -31,8 +31,8 @@ import api.Task;
  */
 public class TaskEuclideanTsp implements Task<int[]>
 {
-    private static final int NUM_PIXELS = 600;
-    private double[][] cities;
+    final private static int NUM_PIXELS = 600;
+    final private double[][] cities;
     
     public TaskEuclideanTsp( double[][] cities ) { this.cities = cities; }
     
