@@ -49,10 +49,11 @@ public class TaskMandelbrotSet implements Task<Integer[][]>
     public Integer[][] execute() 
     {
         final Integer[][] counts = new Integer[numPixels][numPixels];
+        final double delta = edgeLength / numPixels;
         for ( int row = 0; row < numPixels; row++ )
             for ( int col = 0; col < numPixels; col++ )
             {
-                counts[row][col] = ( row + col ) % ( iterationLimit + 1 );
+                counts[row][col] = getIterationCount( row, col, delta );
             }
         return counts;
     }
@@ -62,5 +63,22 @@ public class TaskMandelbrotSet implements Task<Integer[][]>
     {
         return String.format( "%s \n\t x: %e \n\t y: %e \n\t length: %e \n\t pixels: %d \n\t iteration limit: %d", 
                 getClass(), lowerLeftX, lowerLeftY, edgeLength, numPixels, iterationLimit );
+    }
+    
+    private int getIterationCount( int row, int col, double delta )
+    {
+        double x0 = lowerLeftX + row * delta;
+        double y0 = lowerLeftY + col * delta;
+        int iteration = 0;
+//        System.out.println( "x: " + x0 + " y: " + y0 + " v: " + ( x0*x0 + y0*y0) + " i: " + iteration + " l: " + iterationLimit );
+        for ( double x = x0, y = y0; x*x + y*y <= 4.0 && iteration < iterationLimit; iteration++ )
+        {
+            double xtemp = x*x - y*y + x0;
+            y = 2*x*y + y0;
+            x = xtemp;
+//            System.out.println( " in loop x: " + x + " y: " + y + " v: " + ( x*x + y*y) + "i: " + iteration + "l: " + iterationLimit );
+        }
+//        System.out.println( "r: " + row + " c: " + col + " i: " + iteration );
+        return iteration;
     }
 }

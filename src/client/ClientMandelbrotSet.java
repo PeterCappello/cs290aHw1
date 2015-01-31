@@ -39,9 +39,9 @@ public class ClientMandelbrotSet extends Client
 {
     private static final double LOWER_LEFT_X = -2.0;
     private static final double LOWER_LEFT_Y = -2.0;
-    private static final double EDGE_LENGTH = -2.0;
-    private static final int N_PIXELS = 512;
-    private static final int ITERATION_LIMIT = 128;
+    private static final double EDGE_LENGTH = 4.0;
+    private static final int N_PIXELS = 256;
+    private static final int ITERATION_LIMIT = 64;
     
     public ClientMandelbrotSet() throws RemoteException 
     { 
@@ -77,12 +77,10 @@ public class ClientMandelbrotSet extends Client
     }
     
     
-    private Color getColor( int i )
+    private Color getColor( int iterationCount )
     {
-        if ( i == ITERATION_LIMIT )
-        {
-            return Color.BLACK;
-        }
-        return new Color( i % ITERATION_LIMIT, 0, ( ITERATION_LIMIT - i ) % ITERATION_LIMIT ); 
+        return iterationCount == ITERATION_LIMIT ? Color.BLACK : Color.WHITE;
+        
+//        return new Color( iterationCount % ITERATION_LIMIT, 0, ( ITERATION_LIMIT - iterationCount ) % ITERATION_LIMIT );
     }
 }
