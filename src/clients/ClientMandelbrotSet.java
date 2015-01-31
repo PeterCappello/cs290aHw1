@@ -71,7 +71,7 @@ public class ClientMandelbrotSet extends Client
             for ( int j = 0; j < counts.length; j++ )
             {
                 graphics.setColor( getColor( counts[i][j] ) );
-                graphics.fillRect( i, j, 1, 1 );
+                graphics.fillRect( i, N_PIXELS - j, 1, 1 );
             }
         final ImageIcon imageIcon = new ImageIcon( image );
         return new JLabel( imageIcon );
