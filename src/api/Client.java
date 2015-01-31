@@ -21,9 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package client;
-import api.Computer;
-import api.Task;
+package api;
 import computer.ComputerImpl;
 import java.awt.BorderLayout;
 import java.awt.Container;

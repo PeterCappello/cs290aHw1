@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package client;
+package clients;
 
+import api.Client;
 import api.Task;
 import java.awt.Color;
 import java.awt.Graphics;
