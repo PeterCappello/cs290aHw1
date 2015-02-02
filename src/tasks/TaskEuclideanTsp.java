@@ -24,22 +24,40 @@
 package tasks;
 
 import api.Task;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
  * @author Peter Cappello
  */
-public class TaskEuclideanTsp implements Task<int[]>
+//public class TaskEuclideanTsp implements Task<int[]>
+public class TaskEuclideanTsp implements Task<List<Integer>>
 {
     final private static int NUM_PIXELS = 600;
     final private double[][] cities;
     
     public TaskEuclideanTsp( double[][] cities ) { this.cities = cities; }
     
+//    @Override
+//    public int[] execute() 
+//    {
+//        return new int[]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+//    }
+    
     @Override
-    public int[] execute() 
+    public List<Integer> execute() 
     {
-        return new int[]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+        final int TOUR_SIZE = 10;
+        List<Integer> intList = new ArrayList<>();
+        for ( int i = 0; i < TOUR_SIZE; i++ )
+        {
+            intList.add( i );
+        }
+//        enumPermutations( intList )
+//                .stream()
+//                .
+        return new ArrayList<>(); 
     }
     
     @Override
@@ -55,5 +73,31 @@ public class TaskEuclideanTsp implements Task<int[]>
             stringBuilder.append( cities[ city ][ 1 ] ).append("\n\t");
         }
         return stringBuilder.toString();
+    }
+    
+    /**
+     *  do it recursively
+     */
+   private static List<List<Integer>> enumPermutations( List<Integer> numList )
+   {
+       List<List<Integer>> result = new ArrayList<>();
+        if( numList.isEmpty() )
+        {
+            result.add( new ArrayList<>() );
+            return result;
+        }
+        Integer n = numList.remove( 0 );
+
+        List<List<Integer>> subResult = enumPermutations( numList); //get the permutation for sub list
+        subResult.stream().forEach( (each) -> 
+        {
+            for( int index = 0; index <= each.size(); index++ )
+            {
+                ArrayList<Integer> dest = new ArrayList<>( each ); // make a copy of original list
+                dest.add( index, n ); 
+                result.add( dest );
+            } 
+        });   
+     return result;
     }
 }
