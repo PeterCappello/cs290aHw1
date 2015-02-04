@@ -100,27 +100,28 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         List<List<Integer>> subPermutationList = enumPermutations( numberList );
         
         //  3. solve problem using solution to subproblem
-        subPermutationList.stream().forEach( subPermutation -> 
-        {
-            for( int index = 0; index <= subPermutation.size(); index++ )
-            {
-                ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
-                permutation.add( index, n ); 
-                permutationList.add( permutation );
-            } 
-        });  
 //        subPermutationList.stream().forEach( subPermutation -> 
 //        {
 //            for( int index = 0; index <= subPermutation.size(); index++ )
 //            {
 //                ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
 //                permutation.add( index, n ); 
-//                if ( n == 2  && permutation.contains( 1 ) && permutation.indexOf( 1 ) < permutation.indexOf( 2 ) )
-//                {
-//                    permutationList.add( permutation );
-//                }
+//                permutationList.add( permutation );
 //            } 
-//        });   
+//        });
+        //  include only those cyclic permutations where 1 is before 2.
+        subPermutationList.stream().forEach( subPermutation -> 
+        {
+            for( int index = 0; index <= subPermutation.size(); index++ )
+            {
+                ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
+                permutation.add( index, n ); 
+                if ( n != 1 || index < permutation.indexOf( 2 ) )
+                {
+                    permutationList.add( permutation );
+                }
+            } 
+        });   
         return permutationList;
     }
    
@@ -146,7 +147,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
        int num = 0;
         for ( List<Integer> permutation : permutations )
         {
-            System.out.println( ++num + ": " + permutation + " tourDistance: " + tourDistance( permutation ));
+            System.out.println( ++num + ": " + permutation + " tourDistance: " + tourDistance( permutation ) );
         }
    }
 }
