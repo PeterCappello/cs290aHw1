@@ -99,7 +99,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         //  2. solve subproblem
         List<List<Integer>> subPermutationList = enumPermutations( numberList );
         
-        //  3. solve problem using solution to subproblem
+        //  3. solve problem using subproblem solution
 //        subPermutationList.stream().forEach( subPermutation -> 
 //        {
 //            for( int index = 0; index <= subPermutation.size(); index++ )
@@ -112,15 +112,20 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         //  include only those cyclic permutations where 1 is before 2.
         subPermutationList.stream().forEach( subPermutation -> 
         {
-            for( int index = 0; index <= subPermutation.size(); index++ )
-            {
-                ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
-                permutation.add( index, n ); 
-                if ( n != 1 || index < permutation.indexOf( 2 ) )
+            if ( n != 1 )
+                for( int index = 0; index <= subPermutation.size(); index++ )
                 {
+                    ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
+                    permutation.add( index, n ); 
                     permutationList.add( permutation );
-                }
-            } 
+                } 
+            else 
+               for( int index = 0; index < subPermutation.indexOf( 2 ); index++ )
+                {
+                    ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
+                    permutation.add( index, n ); 
+                    permutationList.add( permutation );
+                } 
         });   
         return permutationList;
     }
