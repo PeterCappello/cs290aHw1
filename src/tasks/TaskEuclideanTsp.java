@@ -42,11 +42,16 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     {
         final int TOUR_SIZE = cities.length;
         List<Integer> intList = new ArrayList<>();
-        for ( int i = 0; i < TOUR_SIZE; i++ )
+        for ( int i = 1; i < TOUR_SIZE; i++ )
         {
             intList.add( i );
         }
+        
+        // permutations of [1, n - 1]
         List<List<Integer>> tours = enumPermutations( intList );
+        
+        // cyclic permutations of  [0, n - 1]
+        tours.stream().forEach( tour -> { tour.add( 0, 0 ); } );
 
         List<Integer> shortestTour = tours.get( 0 );
         double shortestTourDistance = tourDistance( shortestTour );
@@ -103,7 +108,19 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
                 permutation.add( index, n ); 
                 permutationList.add( permutation );
             } 
-        });   
+        });  
+//        subPermutationList.stream().forEach( subPermutation -> 
+//        {
+//            for( int index = 0; index <= subPermutation.size(); index++ )
+//            {
+//                ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
+//                permutation.add( index, n ); 
+//                if ( n == 2  && permutation.contains( 1 ) && permutation.indexOf( 1 ) < permutation.indexOf( 2 ) )
+//                {
+//                    permutationList.add( permutation );
+//                }
+//            } 
+//        });   
         return permutationList;
     }
    
