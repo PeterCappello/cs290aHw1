@@ -31,33 +31,34 @@ import java.util.List;
  *
  * @author Peter Cappello
  */
-//public class TaskEuclideanTsp implements Task<int[]>
 public class TaskEuclideanTsp implements Task<List<Integer>>
 {
-    final private static int NUM_PIXELS = 600;
     final private double[][] cities;
     
     public TaskEuclideanTsp( double[][] cities ) { this.cities = cities; }
     
-//    @Override
-//    public int[] execute() 
-//    {
-//        return new int[]{ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
-//    }
-    
     @Override
     public List<Integer> execute() 
     {
-        final int TOUR_SIZE = 10;
+        final int TOUR_SIZE = cities.length;
         List<Integer> intList = new ArrayList<>();
         for ( int i = 0; i < TOUR_SIZE; i++ )
         {
             intList.add( i );
         }
-//        enumPermutations( intList )
-//                .stream()
-//                .
-        return new ArrayList<>(); 
+        List<List<Integer>> tours = enumPermutations( intList );
+
+        List<Integer> shortestTour = tours.get( 0 );
+        double shortestTourDistance = tourDistance( shortestTour );
+        for ( List<Integer> tour : tours )
+        {
+            if ( tourDistance( tour ) < shortestTourDistance )
+            {
+                shortestTour = tour;
+                shortestTourDistance = tourDistance( tour );
+            }
+        }
+        return shortestTour;
     }
     
     @Override
@@ -75,29 +76,60 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         return stringBuilder.toString();
     }
     
-    /**
-     *  do it recursively
-     */
-   private static List<List<Integer>> enumPermutations( List<Integer> numList )
+   private static List<List<Integer>> enumPermutations( List<Integer> numberList )
    {
-       List<List<Integer>> result = new ArrayList<>();
-        if( numList.isEmpty() )
+       List<List<Integer>> permutationList = new ArrayList<>();
+       
+        // Base case
+        if( numberList.isEmpty() )
         {
-            result.add( new ArrayList<>() );
-            return result;
+            permutationList.add( new ArrayList<>() );
+            return permutationList;
         }
-        Integer n = numList.remove( 0 );
-
-        List<List<Integer>> subResult = enumPermutations( numList); //get the permutation for sub list
-        subResult.stream().forEach( (each) -> 
+        
+        // Inductive case
+        //  1. create subproblem
+        Integer n = numberList.remove( 0 );
+        
+        //  2. solve subproblem
+        List<List<Integer>> subPermutationList = enumPermutations( numberList );
+        
+        //  3. solve problem using solution to subproblem
+        subPermutationList.stream().forEach( subPermutation -> 
         {
-            for( int index = 0; index <= each.size(); index++ )
+            for( int index = 0; index <= subPermutation.size(); index++ )
             {
-                ArrayList<Integer> dest = new ArrayList<>( each ); // make a copy of original list
-                dest.add( index, n ); 
-                result.add( dest );
+                ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
+                permutation.add( index, n ); 
+                permutationList.add( permutation );
             } 
         });   
-     return result;
+        return permutationList;
     }
+   
+   private double tourDistance( List<Integer> tour )
+   {
+       double cost = 0.0;
+       for ( int city = 0; city < tour.size() - 1; city ++ )
+       {
+           cost += distance( cities[ tour.get( city ) ], cities[ tour.get( city + 1 ) ] );
+       }
+       return cost + distance( cities[ tour.get( tour.size() - 1 ) ], cities[ tour.get( 0 ) ] );
+   }
+   
+   private static double distance( double[] city1, double[] city2 )
+   {
+       double deltaX = city1[ 0 ] - city2[ 0 ];
+       double deltaY = city1[ 1 ] - city2[ 1 ];
+       return Math.sqrt( deltaX * deltaX + deltaY * deltaY );
+   }
+   
+   private void printPermutations( List<List<Integer>> permutations )
+   {
+       int num = 0;
+        for ( List<Integer> permutation : permutations )
+        {
+            System.out.println( ++num + ": " + permutation + " tourDistance: " + tourDistance( permutation ));
+        }
+   }
 }

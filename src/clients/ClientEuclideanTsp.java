@@ -29,8 +29,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import static java.lang.System.out;
 import java.rmi.RemoteException;
+import java.util.List;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import tasks.TaskEuclideanTsp;
@@ -67,29 +67,32 @@ public class ClientEuclideanTsp extends Client
     {
         System.setSecurityManager( new SecurityManager() );
         final ClientEuclideanTsp client = new ClientEuclideanTsp();
-        int[] value = (int[]) client.runTask();
-        client.add( client.getLabel( value ) );
+        List<Integer> value = ( List<Integer> ) client.runTask();
+        client.add( client.getLabel( value.toArray( new Integer[0] ) ) );
     }
     
-    public JLabel getLabel( int[] tour )
+    public JLabel getLabel( Integer[] tour )
     {
-        out.print( "Tour: ");
+        System.out.print( "Tour: ");
         for ( int city: tour )
         {
-            out.print( city + " ");
+            System.out.print( city + " ");
         }
-        out.println("");
 
         // display the graph graphically, as it were
         // get minX, maxX, minY, maxY, assuming they 0.0 <= mins
         double minX = CITIES[0][0], maxX = CITIES[0][0];
         double minY = CITIES[0][1], maxY = CITIES[0][1];
-        for ( int i = 0; i < CITIES.length; i++ )
+        for ( double[] cities : CITIES ) 
         {
-            if ( CITIES[i][0] < minX ) minX = CITIES[i][0];
-            if ( CITIES[i][0] > maxX ) maxX = CITIES[i][0];
-            if ( CITIES[i][1] < minY ) minY = CITIES[i][1];
-            if ( CITIES[i][1] > maxY ) maxY = CITIES[i][1];
+            if ( cities[0] < minX ) 
+                minX = cities[0];
+            if ( cities[0] > maxX ) 
+                maxX = cities[0];
+            if ( cities[1] < minY ) 
+                minY = cities[1];
+            if ( cities[1] > maxY ) 
+                maxY = cities[1];
         }
 
         // scale points to fit in unit square
