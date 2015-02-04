@@ -33,6 +33,9 @@ import java.util.List;
  */
 public class TaskEuclideanTsp implements Task<List<Integer>>
 {
+    final static Integer ONE = 1;
+    final static Integer TWO = 2;
+    
     final private double[][] cities;
     
     public TaskEuclideanTsp( double[][] cities ) { this.cities = cities; }
@@ -47,10 +50,10 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
             intList.add( i );
         }
         
-        // permutations of [1, n - 1]
+        //  tours = permutations[1, n - 1], where p in tours ==> reverse(p) not in tours.
         List<List<Integer>> tours = enumPermutations( intList );
         
-        // cyclic permutations of  [0, n - 1]
+        // cyclic permutations[0, n - 1], again omitting reverse permutations.
         tours.stream().forEach( tour -> { tour.add( 0, 0 ); } );
 
         List<Integer> shortestTour = tours.get( 0 );
@@ -94,43 +97,35 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         
         // Inductive case
         //  1. create subproblem
-        Integer n = numberList.remove( 0 );
+        final Integer n = numberList.remove( 0 );
         
         //  2. solve subproblem
-        List<List<Integer>> subPermutationList = enumPermutations( numberList );
+        final List<List<Integer>> subPermutationList = enumPermutations( numberList );
         
         //  3. solve problem using subproblem solution
-//        subPermutationList.stream().forEach( subPermutation -> 
-//        {
-//            for( int index = 0; index <= subPermutation.size(); index++ )
-//            {
-//                ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
-//                permutation.add( index, n ); 
-//                permutationList.add( permutation );
-//            } 
-//        });
-        //  include only those cyclic permutations where 1 is before 2.
         subPermutationList.stream().forEach( subPermutation -> 
         {
-            if ( n != 1 )
+//            for( int index = 0; index <= subPermutation.size(); index++ )
+//                permutationList.add( addElement( subPermutation, index, n ) );
+            //  include only distinct cyclic permutations where 1 is before 2.
+            if ( n != ONE )
                 for( int index = 0; index <= subPermutation.size(); index++ )
-                {
-                    ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
-                    permutation.add( index, n ); 
-                    permutationList.add( permutation );
-                } 
+                    permutationList.add( addElement( subPermutation, index, n ) );
             else 
-               for( int index = 0; index < subPermutation.indexOf( 2 ); index++ )
-                {
-                    ArrayList<Integer> permutation = new ArrayList<>( subPermutation );
-                    permutation.add( index, n ); 
-                    permutationList.add( permutation );
-                } 
+               for( int index = 0; index < subPermutation.indexOf( TWO ); index++ )
+                    permutationList.add( addElement( subPermutation, index, n ) );
         });   
         return permutationList;
     }
    
-   private double tourDistance( List<Integer> tour )
+   private static List<Integer> addElement( final List<Integer> subPermutation, final int index, final Integer n )
+   {
+        List<Integer> permutation = new ArrayList<>( subPermutation );
+        permutation.add( index, n );
+        return permutation;
+   }
+   
+   private double tourDistance( final List<Integer> tour )
    {
        double cost = 0.0;
        for ( int city = 0; city < tour.size() - 1; city ++ )
@@ -140,19 +135,19 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
        return cost + distance( cities[ tour.get( tour.size() - 1 ) ], cities[ tour.get( 0 ) ] );
    }
    
-   private static double distance( double[] city1, double[] city2 )
+   private static double distance( final double[] city1, final double[] city2 )
    {
-       double deltaX = city1[ 0 ] - city2[ 0 ];
-       double deltaY = city1[ 1 ] - city2[ 1 ];
+       final double deltaX = city1[ 0 ] - city2[ 0 ];
+       final double deltaY = city1[ 1 ] - city2[ 1 ];
        return Math.sqrt( deltaX * deltaX + deltaY * deltaY );
    }
    
-   private void printPermutations( List<List<Integer>> permutations )
+   private void printPermutations( final List<List<Integer>> permutations )
    {
        int num = 0;
-        for ( List<Integer> permutation : permutations )
-        {
-            System.out.println( ++num + ": " + permutation + " tourDistance: " + tourDistance( permutation ) );
-        }
+       for ( List<Integer> permutation : permutations )
+       {
+           System.out.println( ++num + ": " + permutation + " tourDistance: " + tourDistance( permutation ) );
+       }
    }
 }
