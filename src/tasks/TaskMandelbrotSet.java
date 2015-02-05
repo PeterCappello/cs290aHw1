@@ -30,11 +30,11 @@ import api.Task;
  */
 public class TaskMandelbrotSet implements Task<Integer[][]>
 {
-    private final double lowerLeftX;
-    private final double lowerLeftY;
-    private final double edgeLength;
-    private final int numPixels;
-    private final int iterationLimit;
+    final private double lowerLeftX;
+    final private double lowerLeftY;
+    final private double edgeLength;
+    final private int numPixels;
+    final private int iterationLimit;
             
     public TaskMandelbrotSet( double lowerLeftX, double lowerLeftY, double edgeLength, int numPixels, int iterationLimit )
     {
@@ -61,24 +61,21 @@ public class TaskMandelbrotSet implements Task<Integer[][]>
     @Override
     public String toString()
     {
-        return String.format( "%s \n\t x: %e \n\t y: %e \n\t length: %e \n\t pixels: %d \n\t iteration limit: %d", 
+        return String.format( "%s \n\t x: %e \n\t y: %e \n\t length: %e \n\t pixels: %d \n\t iteration limit: %d\n", 
                 getClass(), lowerLeftX, lowerLeftY, edgeLength, numPixels, iterationLimit );
     }
     
     private int getIterationCount( int row, int col, double delta )
     {
-        double x0 = lowerLeftX + row * delta;
-        double y0 = lowerLeftY + col * delta;
+        final double x0 = lowerLeftX + row * delta;
+        final double y0 = lowerLeftY + col * delta;
         int iteration = 0;
-//        System.out.println( "x: " + x0 + " y: " + y0 + " v: " + ( x0*x0 + y0*y0) + " i: " + iteration + " l: " + iterationLimit );
         for ( double x = x0, y = y0; x*x + y*y <= 4.0 && iteration < iterationLimit; iteration++ )
         {
             double xtemp = x*x - y*y + x0;
             y = 2*x*y + y0;
             x = xtemp;
-//            System.out.println( " in loop x: " + x + " y: " + y + " v: " + ( x*x + y*y) + "i: " + iteration + "l: " + iterationLimit );
         }
-//        System.out.println( "r: " + row + " c: " + col + " i: " + iteration );
         return iteration;
     }
 }

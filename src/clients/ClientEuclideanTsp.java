@@ -23,7 +23,6 @@
  */
 package clients;
 
-import api.Client;
 import api.Task;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -55,7 +54,6 @@ public class ClientEuclideanTsp extends Client
         { 1, 3 },
         { 6, 6 }
     };
-    private Client client;
     private Task task;
     
     public ClientEuclideanTsp() throws RemoteException
@@ -67,17 +65,18 @@ public class ClientEuclideanTsp extends Client
     {
         System.setSecurityManager( new SecurityManager() );
         final ClientEuclideanTsp client = new ClientEuclideanTsp();
-        List<Integer> value = ( List<Integer> ) client.runTask();
+        final List<Integer> value = ( List<Integer> ) client.runTask();
         client.add( client.getLabel( value.toArray( new Integer[0] ) ) );
     }
     
-    public JLabel getLabel( Integer[] tour )
+    public JLabel getLabel( final Integer[] tour )
     {
         System.out.print( "Tour: ");
-        for ( int city: tour )
+        for ( int city : tour )
         {
             System.out.print( city + " ");
         }
+        System.out.println( "" );
 
         // display the graph graphically, as it were
         // get minX, maxX, minY, maxY, assuming they 0.0 <= mins
@@ -96,7 +95,7 @@ public class ClientEuclideanTsp extends Client
         }
 
         // scale points to fit in unit square
-        double side = Math.max( maxX - minX, maxY - minY );
+        final double side = Math.max( maxX - minX, maxY - minY );
         double[][] scaledCities = new double[CITIES.length][2];
         for ( int i = 0; i < CITIES.length; i++ )
         {
@@ -104,11 +103,11 @@ public class ClientEuclideanTsp extends Client
             scaledCities[i][1] = ( CITIES[i][1] - minY ) / side;
         }
 
-        Image image = new BufferedImage( NUM_PIXALS, NUM_PIXALS, BufferedImage.TYPE_INT_ARGB );
-        Graphics graphics = image.getGraphics();
+        final Image image = new BufferedImage( NUM_PIXALS, NUM_PIXALS, BufferedImage.TYPE_INT_ARGB );
+        final Graphics graphics = image.getGraphics();
 
-        int margin = 10;
-        int field = NUM_PIXALS - 2*margin;
+        final int margin = 10;
+        final int field = NUM_PIXALS - 2*margin;
         // draw edges
         graphics.setColor( Color.BLUE );
         int x1, y1, x2, y2;
@@ -130,7 +129,7 @@ public class ClientEuclideanTsp extends Client
         graphics.drawLine( x1, y1, x2, y2 );
 
         // draw vertices
-        int VERTEX_DIAMETER = 6;
+        final int VERTEX_DIAMETER = 6;
         graphics.setColor( Color.RED );
         for ( int i = 0; i < CITIES.length; i++ )
         {
@@ -140,7 +139,7 @@ public class ClientEuclideanTsp extends Client
                                y - VERTEX_DIAMETER/2,
                               VERTEX_DIAMETER, VERTEX_DIAMETER);
         }
-        ImageIcon imageIcon = new ImageIcon( image );
+        final ImageIcon imageIcon = new ImageIcon( image );
         return new JLabel( imageIcon );
     }
 }

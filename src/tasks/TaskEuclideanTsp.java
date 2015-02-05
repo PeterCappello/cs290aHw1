@@ -74,7 +74,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append( getClass() );
-        stringBuilder.append( "\t Cities:\n\t" );
+        stringBuilder.append( "\n\tCities:\n\t" );
         for ( int city = 0; city < cities.length; city++ )
         {
             stringBuilder.append( city ).append( ": ");
@@ -107,7 +107,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         {
 //            for( int index = 0; index <= subPermutation.size(); index++ )
 //                permutationList.add( addElement( subPermutation, index, n ) );
-            //  include only distinct cyclic permutations where 1 is before 2.
+            //  if p is a cyclic permutations, omit reverse(p): 1 always occurs before 2 in p.
             if ( n != ONE )
                 for( int index = 0; index <= subPermutation.size(); index++ )
                     permutationList.add( addElement( subPermutation, index, n ) );

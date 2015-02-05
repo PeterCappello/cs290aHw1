@@ -21,7 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package api;
+package clients;
+import api.Computer;
+import api.Task;
 import computer.ComputerImpl;
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -33,7 +35,7 @@ import javax.swing.JScrollPane;
 /**
  *
  * @author Peter Cappello
- * @param <T> return type of runTask method
+ * @param <T> return type the Task that this Client executes.
  */
 public class Client<T> extends JFrame
 {
@@ -41,7 +43,7 @@ public class Client<T> extends JFrame
     final private   Computer computer;
           protected T taskReturnValue;
     
-    public Client( String title, Task task ) throws RemoteException
+    public Client( final String title, final Task task ) throws RemoteException
     {     
         this.task = task;
         setTitle( title );
@@ -52,9 +54,9 @@ public class Client<T> extends JFrame
         computer = new ComputerImpl(); //(Computer) Naming.lookup( url );
     }
     
-    public void add( JLabel jLabel )
+    public void add( final JLabel jLabel )
     {
-        Container container = getContentPane();
+        final Container container = getContentPane();
         container.setLayout( new BorderLayout() );
         container.add( new JScrollPane( jLabel ), BorderLayout.CENTER );
         pack();
@@ -67,7 +69,7 @@ public class Client<T> extends JFrame
         final long startTime = System.nanoTime();
         final T value = (T) computer.execute( task );
         final long runTime = ( System.nanoTime() - startTime ) / 1000000;
-        System.out.println( task + "\n\t runtime: " + runTime + " ms.");
+        System.out.println( task + "\n\t runtime: " + runTime + " ms.\n");
         return value;
     }
 }

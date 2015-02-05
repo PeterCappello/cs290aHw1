@@ -22,7 +22,6 @@
  * THE SOFTWARE.
  */
 package clients;
-import api.Client;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -81,7 +80,5 @@ public class ClientMandelbrotSet extends Client
     private Color getColor( int iterationCount )
     {
         return iterationCount == ITERATION_LIMIT ? Color.BLACK : Color.WHITE;
-        
-//        return new Color( iterationCount % ITERATION_LIMIT, 0, ( ITERATION_LIMIT - iterationCount ) % ITERATION_LIMIT );
     }
 }
