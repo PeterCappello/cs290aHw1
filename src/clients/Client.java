@@ -39,11 +39,15 @@ import javax.swing.JScrollPane;
  */
 public class Client<T> extends JFrame
 {
-    final protected Task task;
-    final private   Computer computer;
+
+    /**
+     *
+     */
+    final protected Task<T> task;
+    final private   Computer<T> computer;
           protected T taskReturnValue;
     
-    public Client( final String title, final Task task ) throws RemoteException
+    public Client( final String title, final Task<T> task ) throws RemoteException
     {     
         this.task = task;
         setTitle( title );
@@ -67,7 +71,7 @@ public class Client<T> extends JFrame
     {
         computer.execute( task );
         final long startTime = System.nanoTime();
-        final T value = (T) computer.execute( task );
+        final T value = computer.execute( task );
         final long runTime = ( System.nanoTime() - startTime ) / 1000000;
         System.out.println( task + "\n\t runtime: " + runTime + " ms.\n");
         return value;

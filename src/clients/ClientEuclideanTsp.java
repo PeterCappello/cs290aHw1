@@ -22,8 +22,6 @@
  * THE SOFTWARE.
  */
 package clients;
-
-import api.Task;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -38,7 +36,7 @@ import tasks.TaskEuclideanTsp;
  *
  * @author Peter Cappello
  */
-public class ClientEuclideanTsp extends Client
+public class ClientEuclideanTsp extends Client<List<Integer>>
 {
     private static final int NUM_PIXALS = 600;
     private static final double[][] CITIES = 
@@ -54,7 +52,6 @@ public class ClientEuclideanTsp extends Client
         { 1, 3 },
         { 6, 6 }
     };
-    private Task task;
     
     public ClientEuclideanTsp() throws RemoteException
     { 
@@ -65,7 +62,7 @@ public class ClientEuclideanTsp extends Client
     {
         System.setSecurityManager( new SecurityManager() );
         final ClientEuclideanTsp client = new ClientEuclideanTsp();
-        final List<Integer> value = ( List<Integer> ) client.runTask();
+        final List<Integer> value = client.runTask();
         client.add( client.getLabel( value.toArray( new Integer[0] ) ) );
     }
     

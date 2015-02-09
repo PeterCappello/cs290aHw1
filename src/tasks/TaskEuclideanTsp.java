@@ -51,7 +51,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         }
         
         //  tours = permutations[1, n - 1], where p in tours ==> reverse(p) not in tours.
-        List<List<Integer>> tours = enumPermutations( intList );
+        List<List<Integer>> tours = enumeratePermutations( intList );
         
         // cyclic permutations[0, n - 1], again omitting reverse permutations.
         tours.stream().forEach( tour -> { tour.add( 0, 0 ); } );
@@ -84,7 +84,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         return stringBuilder.toString();
     }
     
-   private static List<List<Integer>> enumPermutations( List<Integer> numberList )
+   private static List<List<Integer>> enumeratePermutations( List<Integer> numberList )
    {
        List<List<Integer>> permutationList = new ArrayList<>();
        
@@ -100,15 +100,13 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         final Integer n = numberList.remove( 0 );
         
         //  2. solve subproblem
-        final List<List<Integer>> subPermutationList = enumPermutations( numberList );
+        final List<List<Integer>> subPermutationList = enumeratePermutations( numberList );
         
         //  3. solve problem using subproblem solution
         subPermutationList.stream().forEach( subPermutation -> 
-        {
-//            for( int index = 0; index <= subPermutation.size(); index++ )
-//                permutationList.add( addElement( subPermutation, index, n ) );
-            //  if p is a cyclic permutations, omit reverse(p): 1 always occurs before 2 in p.
-            if ( n != ONE )
+        {            
+            //  if p is a cyclic permutation, omit reverse(p): 1 always occurs before 2 in p.
+            if ( ! n.equals( ONE ) )
                 for( int index = 0; index <= subPermutation.size(); index++ )
                     permutationList.add( addElement( subPermutation, index, n ) );
             else 

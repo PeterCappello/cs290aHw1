@@ -29,4 +29,7 @@ import java.rmi.Remote;
  * @author Peter Cappello
  * @param <T> the task return type.
  */
-public interface Task<T> extends Remote { T execute(); }
+public interface Task<T> extends Remote 
+{ 
+    T execute(); 
+}

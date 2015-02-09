@@ -27,11 +27,12 @@ import java.rmi.RemoteException;
 /**
  *
  * @author Peter Cappello
+ * @param <T> type of the Task return value.
  */
-public interface Computer
+public interface Computer<T>
 {
     public static int PORT = 1099;
     public static String SERVICE_NAME = "Computer";
     
-    public Object execute( Task task ) throws RemoteException;
+    public T execute( Task<T> task ) throws RemoteException;
 }

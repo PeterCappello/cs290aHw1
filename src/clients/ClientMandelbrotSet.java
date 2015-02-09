@@ -35,7 +35,7 @@ import tasks.TaskMandelbrotSet;
  *
  * @author Peter Cappello
  */
-public class ClientMandelbrotSet extends Client
+public class ClientMandelbrotSet extends Client<Integer[][]>
 {
     private static final double LOWER_LEFT_X = -2.0;
     private static final double LOWER_LEFT_Y = -2.0;
@@ -58,7 +58,7 @@ public class ClientMandelbrotSet extends Client
     {  
         System.setSecurityManager( new SecurityManager() );
         final ClientMandelbrotSet client = new ClientMandelbrotSet();
-        Integer[][] value = (Integer[][]) client.runTask();
+        Integer[][] value = client.runTask();
         client.add( client.getLabel( value ) );
     }
     
