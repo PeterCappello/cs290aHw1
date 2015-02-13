@@ -26,8 +26,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import tasks.TaskEuclideanTsp;
@@ -53,27 +57,25 @@ public class ClientEuclideanTsp extends Client<List<Integer>>
         { 6, 6 }
     };
     
-    public ClientEuclideanTsp() throws RemoteException
+    public ClientEuclideanTsp() throws RemoteException, NotBoundException, MalformedURLException
     { 
-        super( "Euclidean TSP", new TaskEuclideanTsp( CITIES ) ); 
+        super( "Euclidean TSP", null, new TaskEuclideanTsp( CITIES ) ); 
     }
     
     public static void main( String[] args ) throws Exception
     {
         System.setSecurityManager( new SecurityManager() );
+        long startTime = System.nanoTime();
         final ClientEuclideanTsp client = new ClientEuclideanTsp();
         final List<Integer> value = client.runTask();
         client.add( client.getLabel( value.toArray( new Integer[0] ) ) );
+        long totalTime = System.nanoTime() - startTime;
+        Logger.getLogger( ClientEuclideanTsp.class.getCanonicalName() ).log(Level.INFO, "Client time: {0} ms.", totalTime / 1000000 );
     }
     
     public JLabel getLabel( final Integer[] tour )
     {
-        System.out.print( "Tour: ");
-        for ( int city : tour )
-        {
-            System.out.print( city + " ");
-        }
-        System.out.println( "" );
+        Logger.getLogger( ClientEuclideanTsp.class.getCanonicalName() ).log(Level.INFO, tourToString( tour ) );
 
         // display the graph graphically, as it were
         // get minX, maxX, minY, maxY, assuming they 0.0 <= mins
@@ -138,5 +140,16 @@ public class ClientEuclideanTsp extends Client<List<Integer>>
         }
         final ImageIcon imageIcon = new ImageIcon( image );
         return new JLabel( imageIcon );
+    }
+    
+    private String tourToString( Integer[] cities )
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append( "Tour: " );
+        for ( Integer city : cities )
+        {
+            stringBuilder.append( city ).append( ' ' );
+        }
+        return stringBuilder.toString();
     }
 }

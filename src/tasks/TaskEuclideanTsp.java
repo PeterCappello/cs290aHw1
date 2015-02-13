@@ -139,13 +139,4 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
        final double deltaY = city1[ 1 ] - city2[ 1 ];
        return Math.sqrt( deltaX * deltaX + deltaY * deltaY );
    }
-   
-   private void printPermutations( final List<List<Integer>> permutations )
-   {
-       int num = 0;
-       for ( List<Integer> permutation : permutations )
-       {
-           System.out.println( ++num + ": " + permutation + " tourDistance: " + tourDistance( permutation ) );
-       }
-   }
 }
