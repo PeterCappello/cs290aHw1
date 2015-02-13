@@ -47,6 +47,7 @@ public class Client<T> extends JFrame
     final protected Task<T> task;
           private   Computer<T> computer;
           protected T taskReturnValue;
+          private long startTime;
     
     public Client( final String title, final String domainName, final Task<T> task ) 
             throws RemoteException, NotBoundException, MalformedURLException
@@ -57,6 +58,13 @@ public class Client<T> extends JFrame
         
         String url = "rmi://" + domainName + ":" + Computer.PORT + "/" + Computer.SERVICE_NAME;
         computer = ( domainName == null ) ? new ComputerImpl() : (Computer) Naming.lookup( url );
+    }
+    
+    public void begin() { startTime = System.nanoTime(); }
+    
+    public void end() 
+    { 
+        Logger.getLogger( Client.class.getCanonicalName() ).log(Level.INFO, "Client time: {0} ms.", (System.nanoTime() - startTime) / 1000000 );
     }
     
     public void add( final JLabel jLabel )

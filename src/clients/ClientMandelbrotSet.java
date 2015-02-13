@@ -61,12 +61,11 @@ public class ClientMandelbrotSet extends Client<Integer[][]>
     public static void main( String[] args ) throws Exception
     {  
         System.setSecurityManager( new SecurityManager() );
-        long startTime = System.nanoTime();
         final ClientMandelbrotSet client = new ClientMandelbrotSet();
+        client.begin();
         Integer[][] value = client.runTask();
         client.add( client.getLabel( value ) );
-        long totalTime = System.nanoTime() - startTime;
-        Logger.getLogger( ClientMandelbrotSet.class.getCanonicalName() ).log(Level.INFO, "Client time: {0} ms.", totalTime / 1000000 );
+        client.end();
     }
     
     public JLabel getLabel( Integer[][] counts )

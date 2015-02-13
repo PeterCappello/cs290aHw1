@@ -65,12 +65,11 @@ public class ClientEuclideanTsp extends Client<List<Integer>>
     public static void main( String[] args ) throws Exception
     {
         System.setSecurityManager( new SecurityManager() );
-        long startTime = System.nanoTime();
         final ClientEuclideanTsp client = new ClientEuclideanTsp();
+        client.begin();
         final List<Integer> value = client.runTask();
         client.add( client.getLabel( value.toArray( new Integer[0] ) ) );
-        long totalTime = System.nanoTime() - startTime;
-        Logger.getLogger( ClientEuclideanTsp.class.getCanonicalName() ).log(Level.INFO, "Client time: {0} ms.", totalTime / 1000000 );
+        client.end();
     }
     
     public JLabel getLabel( final Integer[] tour )
