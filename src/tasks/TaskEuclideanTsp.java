@@ -24,8 +24,11 @@
 package tasks;
 
 import api.Task;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import org.paukov.combinatorics.Factory;
+import org.paukov.combinatorics.Generator;
+import org.paukov.combinatorics.ICombinatoricsVector;
 
 /**
  *
@@ -43,30 +46,41 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     @Override
     public List<Integer> execute() 
     {
-        final int TOUR_SIZE = cities.length;
-        List<Integer> intList = new ArrayList<>();
-        for ( int i = 1; i < TOUR_SIZE; i++ )
-        {
-            intList.add( i );
-        }
+        // initial value for shortestTour and its distance.
+        List<Integer> partialCityList = initialTour();
+        List<Integer> shortestTour = new LinkedList<>( partialCityList );
+        shortestTour.add( 0, 0 );
+        double shortestTourDistance = tourDistance( cities, shortestTour );
         
-        //  tours = permutations[1, n - 1], where p in tours ==> reverse(p) not in tours.
-        List<List<Integer>> tours = enumeratePermutations( intList );
-        
-        // cyclic permutations[0, n - 1], again omitting reverse permutations.
-        tours.stream().forEach( tour -> { tour.add( 0, 0 ); } );
-
-        List<Integer> shortestTour = tours.get( 0 );
-        double shortestTourDistance = tourDistance( shortestTour );
-        for ( List<Integer> tour : tours )
+        // Use Combinatoricslib-2.1 to generate tour suffixes
+        ICombinatoricsVector<Integer> initialVector = Factory.createVector( partialCityList );
+        Generator<Integer> generator = Factory.createPermutationGenerator(initialVector);
+        for ( ICombinatoricsVector<Integer> tourSuffix : generator ) 
         {
-            if ( tourDistance( tour ) < shortestTourDistance )
+            List<Integer> tour = tourSuffix.getVector();
+            tour.add( 0, 0 );
+            if ( tour.indexOf( ONE ) >  tour.indexOf( TWO ) )
+            {
+                continue; // skip tour; it is the reverse of another.
+            }
+            double tourDistance = tourDistance( cities, tour );
+            if ( tourDistance < shortestTourDistance )
             {
                 shortestTour = tour;
-                shortestTourDistance = tourDistance( tour );
+                shortestTourDistance = tourDistance;
             }
         }
         return shortestTour;
+    }
+    
+    List<Integer> initialTour()
+    {
+        List<Integer> tour = new LinkedList<>();
+        for ( int city = 1; city < cities.length; city++ )
+        {
+            tour.add( city );
+        }
+        return tour;
     }
     
     @Override
@@ -84,46 +98,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         return stringBuilder.toString();
     }
     
-   private static List<List<Integer>> enumeratePermutations( List<Integer> numberList )
-   {
-       List<List<Integer>> permutationList = new ArrayList<>();
-       
-        // Base case
-        if( numberList.isEmpty() )
-        {
-            permutationList.add( new ArrayList<>() );
-            return permutationList;
-        }
-        
-        // Inductive case
-        //  1. create subproblem
-        final Integer n = numberList.remove( 0 );
-        
-        //  2. solve subproblem
-        final List<List<Integer>> subPermutationList = enumeratePermutations( numberList );
-        
-        //  3. solve problem using subproblem solution
-        subPermutationList.stream().forEach( subPermutation -> 
-        {            
-            //  if p is a cyclic permutation, omit reverse(p): 1 always occurs before 2 in p.
-            if ( ! n.equals( ONE ) )
-                for( int index = 0; index <= subPermutation.size(); index++ )
-                    permutationList.add( addElement( subPermutation, index, n ) );
-            else 
-               for( int index = 0; index < subPermutation.indexOf( TWO ); index++ )
-                    permutationList.add( addElement( subPermutation, index, n ) );
-        });   
-        return permutationList;
-    }
-   
-   private static List<Integer> addElement( final List<Integer> subPermutation, final int index, final Integer n )
-   {
-        List<Integer> permutation = new ArrayList<>( subPermutation );
-        permutation.add( index, n );
-        return permutation;
-   }
-   
-   private double tourDistance( final List<Integer> tour )
+   private double tourDistance( double[][] cities, final List<Integer> tour  )
    {
        double cost = 0.0;
        for ( int city = 0; city < tour.size() - 1; city ++ )
