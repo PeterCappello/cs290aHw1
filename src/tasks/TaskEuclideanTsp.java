@@ -24,6 +24,7 @@
 package tasks;
 
 import api.Task;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import org.paukov.combinatorics.Factory;
@@ -114,4 +115,43 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
        final double deltaY = city1[ 1 ] - city2[ 1 ];
        return Math.sqrt( deltaX * deltaX + deltaY * deltaY );
    }
+   
+   private static List<List<Integer>> enumeratePermutations( List<Integer> numberList )
+  {
+      List<List<Integer>> permutationList = new ArrayList<>();
+      
+       // Base case
+      if( numberList.isEmpty() )
+       {
+           permutationList.add( new ArrayList<>() );
+           return permutationList;
+       }
+       
+       // Inductive case
+       //  1. create subproblem
+       final Integer n = numberList.remove( 0 );
+       
+       //  2. solve subproblem
+       final List<List<Integer>> subPermutationList = enumeratePermutations( numberList );
+       
+       //  3. solve problem using subproblem solution
+       subPermutationList.stream().forEach( subPermutation -> 
+       {            
+           //  if p is a cyclic permutation, omit reverse(p): 1 always occurs before 2 in p.
+           if ( ! n.equals( ONE ) )
+               for( int index = 0; index <= subPermutation.size(); index++ )
+                   permutationList.add( addElement( subPermutation, index, n ) );
+           else 
+              for( int index = 0; index < subPermutation.indexOf( TWO ); index++ )
+                   permutationList.add( addElement( subPermutation, index, n ) );
+       });   
+       return permutationList;
+   }
+  
+  private static List<Integer> addElement( final List<Integer> subPermutation, final int index, final Integer n )
+  {
+       List<Integer> permutation = new ArrayList<>( subPermutation );
+       permutation.add( index, n );
+       return permutation;
+  }
 }
