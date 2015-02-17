@@ -54,11 +54,29 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         double shortestTourDistance = tourDistance( cities, shortestTour );
         
         // Use Combinatoricslib-2.1 to generate tour suffixes
-        ICombinatoricsVector<Integer> initialVector = Factory.createVector( partialCityList );
-        Generator<Integer> generator = Factory.createPermutationGenerator(initialVector);
-        for ( ICombinatoricsVector<Integer> tourSuffix : generator ) 
+//        ICombinatoricsVector<Integer> initialVector = Factory.createVector( partialCityList );
+//        Generator<Integer> generator = Factory.createPermutationGenerator(initialVector);
+//        for ( ICombinatoricsVector<Integer> tourSuffix : generator ) 
+//        {
+//            List<Integer> tour = tourSuffix.getVector();
+//            tour.add( 0, 0 );
+//            if ( tour.indexOf( ONE ) >  tour.indexOf( TWO ) )
+//            {
+//                continue; // skip tour; it is the reverse of another.
+//            }
+//            double tourDistance = tourDistance( cities, tour );
+//            if ( tourDistance < shortestTourDistance )
+//            {
+//                shortestTour = tour;
+//                shortestTourDistance = tourDistance;
+//            }
+//        }
+        
+        // Use my permutation enumerator
+        PermutationEnumerator permutationEnumerator = new PermutationEnumerator( partialCityList );
+        for ( List<Integer> subtour = permutationEnumerator.next(); subtour != null; subtour = permutationEnumerator.next() ) 
         {
-            List<Integer> tour = tourSuffix.getVector();
+            List<Integer> tour = new ArrayList<>( subtour );
             tour.add( 0, 0 );
             if ( tour.indexOf( ONE ) >  tour.indexOf( TWO ) )
             {

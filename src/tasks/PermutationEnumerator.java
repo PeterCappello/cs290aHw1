@@ -26,6 +26,9 @@ package tasks;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.paukov.combinatorics.Factory;
+import org.paukov.combinatorics.Generator;
+import org.paukov.combinatorics.ICombinatoricsVector;
 
 /**
  *
@@ -59,7 +62,7 @@ public class PermutationEnumerator<T>
         { 
             return; 
         }
-        subpermutation = new ArrayList( permutation );
+        subpermutation = new ArrayList<>( permutation );
         interleaveObject = subpermutation.remove( 0 );
         subPermutationEnumerator = new PermutationEnumerator( subpermutation );
         subpermutation = subPermutationEnumerator.next();
@@ -88,7 +91,7 @@ public class PermutationEnumerator<T>
          final Integer n = integerList.remove( 0 );
 
          //  2. solve subproblem
-         final List<List<Integer>> subPermutationList = enumerate(integerList );
+         final List<List<Integer>> subPermutationList = enumerate( integerList );
 
          //  3. solve problem using subproblem solution
          subPermutationList.stream().forEach( subPermutation -> 
@@ -143,8 +146,8 @@ public class PermutationEnumerator<T>
             }
             else
             {
-                permutation = new ArrayList( subpermutation );
-                permutation.add( 0, interleaveObject);
+                permutation = new ArrayList<>( subpermutation );
+                permutation.add( 0, interleaveObject );                
                 nextIndex = 0;
             }
         }
@@ -153,25 +156,42 @@ public class PermutationEnumerator<T>
     
     public static void main( String[] args ) throws Exception
     {
-        PermutationEnumerator permutationEnumerator = new PermutationEnumerator( Arrays.asList( new Integer[]{ 1, 2, 3, 4 } ) );
-        int i = 0;
-        List<Integer> permutation = permutationEnumerator.next();
-        while ( permutation != null ) 
-        {
-            System.out.println( ++i + ": " + listToString( permutation) );
-            permutation = permutationEnumerator.next();
-        }
+        List<Integer> integerList = Arrays.asList( new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } );
+        long startTime = System.nanoTime();
+        myScheme( integerList );
+//        alternative( integerList );
+        long runTime = ( System.nanoTime() - startTime ) / 1000000;
+        System.out.println( "Runtime: " + runTime  + " ms." );
     }
     
     private static String listToString( List<Integer> integerList )
     {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append( "{ " );
-        for ( Integer integer : integerList )
+        integerList.stream().forEach((integer) -> 
         {
             stringBuilder.append( integer ).append( ' ' );
-        }
+        } );
         stringBuilder.append( '}' );
         return stringBuilder.toString();
+    }
+    
+    private static void myScheme( List<Integer> integerList )
+    {
+        PermutationEnumerator permutationEnumerator = new PermutationEnumerator( integerList );
+//        int i = 0;
+        for ( ; permutationEnumerator.next() != null; ) 
+        {
+//            System.out.print        ++i + ": " + listToString( permutation) );
+//            permutation = permutationEnumerator.next();
+        }
+    }
+    
+    private static void alternative( List<Integer> integerList )
+    {
+        // Use Combinatoricslib-2.1 to generate permutations
+        ICombinatoricsVector<Integer> initialVector = Factory.createVector( integerList );
+        Generator<Integer> generator = Factory.createPermutationGenerator(initialVector);
+        for (ICombinatoricsVector<Integer> perm : generator) {}
     }
 }
