@@ -24,7 +24,7 @@
 package tasks;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,8 +35,8 @@ import java.util.List;
 public class PermutationEnumerator<T> 
 {
     private PermutationEnumerator subPermutationEnumerator;
-    private List<T> nextPermutation;
-    private List<T> nextSubpermutation;
+    private List<T> permutation;
+    private List<T> subpermutation;
     private int nextIndex = 0;
     private T interleaveObject;
     
@@ -45,26 +45,24 @@ public class PermutationEnumerator<T>
     
     /**
      *
-     * @param objectList the objectList being permuted.
-     * @throws java.lang.Exception
+     * @param objectList the objectList being permuted is unmodified.
+     * @throws java.lang.IllegalArgumentException when passed a null object list.
      */
-    public PermutationEnumerator( final List<T> objectList ) throws Exception
+    public PermutationEnumerator( final List<T> objectList ) throws IllegalArgumentException
     {
         if ( objectList == null )
         {
-            throw new Exception();
+            throw new IllegalArgumentException();
         }
-        List<T> objectSublist = new LinkedList<>( objectList );
-        if ( objectList.isEmpty() )
-        {
-            nextPermutation = objectSublist;
+        permutation = new ArrayList<>( objectList );
+        if ( permutation.isEmpty() )
+        { 
+            return; 
         }
-        else
-        {
-            interleaveObject = objectSublist.remove( 0 );
-            subPermutationEnumerator = new PermutationEnumerator( objectSublist );
-            nextSubpermutation = subPermutationEnumerator.next();
-        }
+        subpermutation = new ArrayList( permutation );
+        interleaveObject = subpermutation.remove( 0 );
+        subPermutationEnumerator = new PermutationEnumerator( subpermutation );
+        subpermutation = subPermutationEnumerator.next();
     }
     
     /**
@@ -114,42 +112,66 @@ public class PermutationEnumerator<T>
    }
     
     /**
-     * Produce the nextPermutation permutation.
-     * @return the nextPermutation permutation as a List.
-     * @throws java.lang.Exception  nextPermutation() invoked when hasNext() is false.
+     * Produce the permutation permutation.
+     * @return the permutation permutation as a List.
+     * If none, returns null.
+     * @throws java.lang.IllegalArgumentException  permutation() invoked when hasNext() is false.
      */
-    public List<T> next() throws Exception
+    public List<T> next() throws IllegalArgumentException
     {
-        if ( ! hasNext() )
+        if ( permutation == null )
         {
-            throw new Exception(); // make more specific
+            return null;
         }
-        List<T> returnValue = new LinkedList<>( nextPermutation );
-        
-        // ?? Can I just compute returnValue as subPermutation.add( nextIndex, interleaveObject ) ? No.
-        // compute new nextPermutation
-        if ( nextPermutation.isEmpty() )
+        List<T> returnValue = new ArrayList<>( permutation );
+        if ( permutation.isEmpty() )
         {
-            nextPermutation = null;
+            permutation = null;
         }
-        else if ( nextIndex <= nextSubpermutation.size() )
+        else if ( nextIndex < permutation.size() - 1)
         {
-            nextPermutation = new LinkedList( nextSubpermutation );
-            nextPermutation.add( nextIndex++, interleaveObject );
-        }
-        else if ( subPermutationEnumerator.hasNext() )
-        {
-            nextSubpermutation = subPermutationEnumerator.next();
-            nextIndex = 0;
-            nextPermutation = new LinkedList( nextSubpermutation );
-            nextPermutation.add( nextIndex++, interleaveObject) ;
+            T temp = permutation.get( nextIndex + 1 );
+            permutation.set( nextIndex + 1, permutation.get( nextIndex ) );
+            permutation.set( nextIndex++, temp );
         }
         else
-        {
-            nextSubpermutation = null;
+        {   
+            subpermutation = subPermutationEnumerator.next();
+            if ( subpermutation == null || subpermutation.isEmpty() )
+            {
+                permutation = null;
+            }
+            else
+            {
+                permutation = new ArrayList( subpermutation );
+                permutation.add( 0, interleaveObject);
+                nextIndex = 0;
+            }
         }
         return returnValue;
     }
     
-    public boolean hasNext() { return nextPermutation != null; }
+    public static void main( String[] args ) throws Exception
+    {
+        PermutationEnumerator permutationEnumerator = new PermutationEnumerator( Arrays.asList( new Integer[]{ 1, 2, 3, 4 } ) );
+        int i = 0;
+        List<Integer> permutation = permutationEnumerator.next();
+        while ( permutation != null ) 
+        {
+            System.out.println( ++i + ": " + listToString( permutation) );
+            permutation = permutationEnumerator.next();
+        }
+    }
+    
+    private static String listToString( List<Integer> integerList )
+    {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append( "{ " );
+        for ( Integer integer : integerList )
+        {
+            stringBuilder.append( integer ).append( ' ' );
+        }
+        stringBuilder.append( '}' );
+        return stringBuilder.toString();
+    }
 }
