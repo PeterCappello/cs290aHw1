@@ -74,7 +74,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
 //        }
         
         // Use my permutation enumerator
-        PermutationEnumerator permutationEnumerator = new PermutationEnumerator( partialCityList );
+        PermutationEnumerator<Integer> permutationEnumerator = new PermutationEnumerator<>( partialCityList );
         for ( List<Integer> subtour = permutationEnumerator.next(); subtour != null; subtour = permutationEnumerator.next() ) 
         {
             List<Integer> tour = new ArrayList<>( subtour );

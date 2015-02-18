@@ -37,7 +37,7 @@ import org.paukov.combinatorics.ICombinatoricsVector;
  */
 public class PermutationEnumerator<T> 
 {
-    private PermutationEnumerator subPermutationEnumerator;
+    private PermutationEnumerator<T> subPermutationEnumerator;
     private List<T> permutation;
     private List<T> subpermutation;
     private int nextIndex = 0;
@@ -64,7 +64,7 @@ public class PermutationEnumerator<T>
         }
         subpermutation = new ArrayList<>( permutation );
         interleaveObject = subpermutation.remove( 0 );
-        subPermutationEnumerator = new PermutationEnumerator( subpermutation );
+        subPermutationEnumerator = new PermutationEnumerator<>( subpermutation );
         subpermutation = subPermutationEnumerator.next();
     }
     
@@ -178,7 +178,7 @@ public class PermutationEnumerator<T>
     
     private static void myScheme( List<Integer> integerList )
     {
-        PermutationEnumerator permutationEnumerator = new PermutationEnumerator( integerList );
+        PermutationEnumerator<Integer> permutationEnumerator = new PermutationEnumerator<>( integerList );
 //        int i = 0;
         for ( ; permutationEnumerator.next() != null; ) 
         {
