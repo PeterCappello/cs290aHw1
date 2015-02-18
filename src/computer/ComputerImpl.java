@@ -44,7 +44,7 @@ public class ComputerImpl extends UnicastRemoteObject implements Computer
     @Override
     public Object execute(Task task) throws RemoteException 
     { 
-        return task.execute();
+        return task.call();
     }
     
     public static void main( String[] args ) throws Exception

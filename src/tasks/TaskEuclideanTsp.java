@@ -23,6 +23,7 @@
  */
 package tasks;
 
+import util.PermutationEnumerator;
 import api.Task;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -45,7 +46,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     public TaskEuclideanTsp( double[][] cities ) { this.cities = cities; }
     
     @Override
-    public List<Integer> execute() 
+    public List<Integer> call() 
     {
         // initial value for shortestTour and its distance.
         List<Integer> partialCityList = initialTour();

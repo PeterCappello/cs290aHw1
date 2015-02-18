@@ -23,13 +23,14 @@
  */
 package api;
 import java.rmi.Remote;
+import java.util.concurrent.Callable;
 
 /**
  *
  * @author Peter Cappello
- * @param <T> the task return type.
+ * @param <V> the task return type.
  */
-public interface Task<T> extends Remote 
+public interface Task<V> extends Remote, Callable<V> 
 { 
-    T execute(); 
+    V call(); 
 }
