@@ -45,8 +45,13 @@ public class TaskMandelbrotSet implements Task<Integer[][]>
         this.iterationLimit = iterationLimit;
     }
     
+    /**
+     * 
+     * @return an Integer[row][col] array of iteration counts, where row and
+     * col correspond to regions in the complex plane.
+     */
     @Override
-    public Integer[][] execute() 
+    public Integer[][] call() 
     {
         final Integer[][] counts = new Integer[numPixels][numPixels];
         final double delta = edgeLength / numPixels;

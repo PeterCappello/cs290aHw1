@@ -26,7 +26,11 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.net.MalformedURLException;
+import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import tasks.TaskMandelbrotSet;
@@ -35,7 +39,7 @@ import tasks.TaskMandelbrotSet;
  *
  * @author Peter Cappello
  */
-public class ClientMandelbrotSet extends Client
+public class ClientMandelbrotSet extends Client<Integer[][]>
 {
     private static final double LOWER_LEFT_X = -2.0;
     private static final double LOWER_LEFT_Y = -2.0;
@@ -43,10 +47,10 @@ public class ClientMandelbrotSet extends Client
     private static final int N_PIXELS = 256;
     private static final int ITERATION_LIMIT = 64;
     
-    public ClientMandelbrotSet() throws RemoteException 
+    public ClientMandelbrotSet() throws RemoteException, NotBoundException, MalformedURLException 
     { 
-        super( "Mandelbrot Set Visualizer", 
-                new TaskMandelbrotSet( LOWER_LEFT_X, LOWER_LEFT_Y, EDGE_LENGTH, N_PIXELS, ITERATION_LIMIT) ); 
+        super( "Mandelbrot Set Visualizer", null,
+               new TaskMandelbrotSet( LOWER_LEFT_X, LOWER_LEFT_Y, EDGE_LENGTH, N_PIXELS, ITERATION_LIMIT) ); 
     }
     
     /**
@@ -58,8 +62,10 @@ public class ClientMandelbrotSet extends Client
     {  
         System.setSecurityManager( new SecurityManager() );
         final ClientMandelbrotSet client = new ClientMandelbrotSet();
-        Integer[][] value = (Integer[][]) client.runTask();
+        client.begin();
+        Integer[][] value = client.runTask();
         client.add( client.getLabel( value ) );
+        client.end();
     }
     
     public JLabel getLabel( Integer[][] counts )
@@ -75,7 +81,6 @@ public class ClientMandelbrotSet extends Client
         final ImageIcon imageIcon = new ImageIcon( image );
         return new JLabel( imageIcon );
     }
-    
     
     private Color getColor( int iterationCount )
     {
