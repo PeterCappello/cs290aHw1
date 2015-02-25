@@ -26,9 +26,9 @@ package util;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.paukov.combinatorics.Factory;
-import org.paukov.combinatorics.Generator;
-import org.paukov.combinatorics.ICombinatoricsVector;
+//import org.paukov.combinatorics.Factory;
+//import org.paukov.combinatorics.Generator;
+//import org.paukov.combinatorics.ICombinatoricsVector;
 
 /**
  *
@@ -190,8 +190,8 @@ public class PermutationEnumerator<T>
     private static void alternative( List<Integer> integerList )
     {
         // Use Combinatoricslib-2.1 to generate permutations
-        ICombinatoricsVector<Integer> initialVector = Factory.createVector( integerList );
-        Generator<Integer> generator = Factory.createPermutationGenerator(initialVector);
-        for (ICombinatoricsVector<Integer> perm : generator) {}
+//        ICombinatoricsVector<Integer> initialVector = Factory.createVector( integerList );
+//        Generator<Integer> generator = Factory.createPermutationGenerator(initialVector);
+//        for (ICombinatoricsVector<Integer> perm : generator) {}
     }
 }
