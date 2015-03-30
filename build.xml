@@ -72,15 +72,15 @@
     -->
     
      <!-- set global properties for this build -->
-  <property name="src" location="src" />
+  <property name="src"   location="src" />
   <property name="build" location="build" />
   <property name="dist"  location="dist" />
   
   <!-- codebase properties -->
-  <property name="computer_file_codebase" location="/cs/faculty/cappello/public_html/cs290b/hw1/computer/" />
-  <property name="computer_web_codebase" value="http://www.cs.ucsb.edu/~cappello/cs290b/hw1/computer/" />  
-  <property name="client_file_codebase" location="/cs/faculty/cappello/public_html/cs290b/hw1/client/" />
-  <property name="client_web_codebase" value="http://www.cs.ucsb.edu/~cappello/cs290b/hw1/client/" />
+  <property name="computer_file_codebase" location="/cs/faculty/cappello/public_html/290B/codebase/1/computer/" />
+  <property name="computer_web_codebase"  value="http://cs.ucsb.edu/~cappello/290B/codebase/1/computer/" />  
+  <property name="client_file_codebase"   location="/cs/faculty/cappello/public_html/290B/codebase/1/client/" />
+  <property name="client_web_codebase"    value="http://cs.ucsb.edu/~cappello/290B/codebase/1/client/" />
 
   <target name="mycompile" description="compile the source" >
     <!-- Create the build directory structure used by compile -->
@@ -101,10 +101,12 @@
     <jar jarfile="${dist}/client.jar" basedir="${build}" includes="client/** api/** tasks/**"/>
     
     <!-- Copy client's task classes to client's codebase --> 
+    <!--
     <mkdir dir="${client_file_codebase}/tasks"/>
     <copy todir="${client_file_codebase}/tasks">
       <fileset dir="${build}/tasks/"/>
     </copy>
+    -->
   </target>
   
   <target name="myjavadoc" depends="mycompile" description="create javadocs">
@@ -122,8 +124,8 @@
   </target>  
   
   <target name="runClient" depends="mydist" description="run client" >
-  	<java classname="client.Client" fork="true">
-  	  <jvmarg value="-Djava.rmi.server.codebase=${client_web_codebase}"/>
+  	<java classname="clients.ClientMandelbrotSet" fork="true">
+  	  <!--<jvmarg value="-Djava.rmi.server.codebase=${client_web_codebase}"/>-->
   	  <jvmarg value="-Djava.security.policy=policy"/>
   	  <arg value="localhost"/>
   	  <classpath>

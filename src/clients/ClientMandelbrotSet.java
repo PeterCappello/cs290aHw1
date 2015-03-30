@@ -29,8 +29,6 @@ import java.awt.image.BufferedImage;
 import java.net.MalformedURLException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import tasks.TaskMandelbrotSet;
@@ -44,12 +42,12 @@ public class ClientMandelbrotSet extends Client<Integer[][]>
     private static final double LOWER_LEFT_X = -2.0;
     private static final double LOWER_LEFT_Y = -2.0;
     private static final double EDGE_LENGTH = 4.0;
-    private static final int N_PIXELS = 256;
+    private static final int N_PIXELS = 512;
     private static final int ITERATION_LIMIT = 64;
     
     public ClientMandelbrotSet() throws RemoteException, NotBoundException, MalformedURLException 
     { 
-        super( "Mandelbrot Set Visualizer", null,
+        super( "Mandelbrot Set Visualizer", "" /*localhost"*/,
                new TaskMandelbrotSet( LOWER_LEFT_X, LOWER_LEFT_Y, EDGE_LENGTH, N_PIXELS, ITERATION_LIMIT) ); 
     }
     

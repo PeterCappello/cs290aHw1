@@ -22,7 +22,7 @@
  * THE SOFTWARE.
  */
 package api;
-import java.rmi.Remote;
+import java.io.Serializable;
 import java.util.concurrent.Callable;
 
 /**
@@ -30,7 +30,8 @@ import java.util.concurrent.Callable;
  * @author Peter Cappello
  * @param <V> the task return type.
  */
-public interface Task<V> extends Remote, Callable<V> 
+public interface Task<V> extends Serializable, Callable<V> 
 { 
+    @Override
     V call(); 
 }

@@ -51,7 +51,7 @@ public class ComputerImpl extends UnicastRemoteObject implements Computer
     {
         System.setSecurityManager( new SecurityManager() );
         LocateRegistry.createRegistry( Computer.PORT )
-                      .rebind( Computer.SERVICE_NAME, new ComputerImpl() );
+                      .rebind( Computer.SERVICE_NAME, (Computer) new ComputerImpl() );
         System.out.println( "Computer running." );
     }
 }
