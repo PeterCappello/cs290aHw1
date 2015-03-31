@@ -45,7 +45,7 @@ import javax.swing.JScrollPane;
 public class Client<T> extends JFrame
 {
     final protected Task<T> task;
-          final private Computer<T> computer;
+          final private Computer computer;
                 protected T taskReturnValue;
                 private long clientStartTime;
     
