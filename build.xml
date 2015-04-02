@@ -98,7 +98,7 @@
     <jar jarfile="${dist}/computer.jar" basedir="${build}" includes="computer/** api/**"/>
     
     <!-- Make client jar file -->
-    <jar jarfile="${dist}/client.jar" basedir="${build}" includes="client/** api/** tasks/**"/>
+    <jar jarfile="${dist}/client.jar" basedir="${build}" includes="clients/** api/** tasks/**"/>
     
     <!-- Copy client's task classes to client's codebase --> 
     <!--

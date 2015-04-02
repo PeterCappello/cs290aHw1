@@ -78,7 +78,6 @@ public class Client<T> extends JFrame
     
     public T runTask() throws RemoteException
     {
-        computer.execute( task );
         final long taskStartTime = System.nanoTime();
         final T value = computer.execute( task );
         final long taskRunTime = ( System.nanoTime() - taskStartTime ) / 1000000;
