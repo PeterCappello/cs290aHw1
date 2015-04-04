@@ -37,12 +37,13 @@ public class ComputerImpl extends UnicastRemoteObject implements Computer
             
     /**
      *
+     * @param <T> type of task.execute() return value.
      * @param task to be executed.
      * @return the return-value of the executed task.
      * @throws RemoteException
      */
     @Override
-    public Object execute(Task task) throws RemoteException 
+    public <T> T execute(Task<T> task) throws RemoteException 
     { 
         return task.call();
     }
