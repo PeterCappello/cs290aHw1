@@ -33,7 +33,7 @@ import java.util.List;
 //import org.paukov.combinatorics.ICombinatoricsVector;
 
 /**
- *
+ * This task computes a solution to a Euclidean TSP problem instance.
  * @author Peter Cappello
  */
 public class TaskEuclideanTsp implements Task<List<Integer>>
@@ -43,6 +43,13 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     
     final private double[][] cities;
     
+    /**
+     * 
+     * @param cities a double array of cities, where each city is a double
+     * array where:
+     *  the 0th element is the city's x coordinate;
+     *  the 1st element is the city's y coordinate.
+     */
     public TaskEuclideanTsp( double[][] cities ) { this.cities = cities; }
     
     @Override
@@ -93,7 +100,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         return shortestTour;
     }
     
-    List<Integer> initialTour()
+    private List<Integer> initialTour()
     {
         List<Integer> tour = new LinkedList<>();
         for ( int city = 1; city < cities.length; city++ )

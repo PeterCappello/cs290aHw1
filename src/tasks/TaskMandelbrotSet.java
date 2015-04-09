@@ -25,7 +25,9 @@ package tasks;
 import api.Task;
 
 /**
- *
+ * This task computes the integer counts, 
+ * according to the Mandelbrot Set approximation recurrence, 
+ * for a given square region in the complex plane.
  * @author Peter Cappello
  */
 public class TaskMandelbrotSet implements Task<Integer[][]>
@@ -36,6 +38,20 @@ public class TaskMandelbrotSet implements Task<Integer[][]>
     final private int numPixels;
     final private int iterationLimit;
             
+    /**
+     *
+     * @param lowerLeftX the x coordinate of the lower left corner of a 
+     * square region of the complex plane.
+     * @param lowerLeftY the y coordinate of the lower left corner of a 
+     * square region of the complex plane.
+     * @param edgeLength the length of the square in the complex plane.
+     * @param numPixels the square region of the complex plane is subdivided into
+     *  numPixels X numPixels square subregions.
+     * @param iterationLimit the limit of the Mandelbrot set recurrence:
+     * Points whose size is less than or equal to 2 after this many iterations
+     * of the recurrence are defined to be in the Mandelbrot set (this is
+     * an approximation of the actual Mandelbrot set).
+     */
     public TaskMandelbrotSet( double lowerLeftX, double lowerLeftY, double edgeLength, int numPixels, int iterationLimit )
     {
         this.lowerLeftX = lowerLeftX;

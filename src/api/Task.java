@@ -26,7 +26,7 @@ import java.io.Serializable;
 import java.util.concurrent.Callable;
 
 /**
- *
+ * Task is an encapsulation of some computation.
  * @author Peter Cappello
  * @param <V> the task return type.
  */
