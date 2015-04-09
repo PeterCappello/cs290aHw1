@@ -47,7 +47,9 @@ public interface Computer extends Remote
      * @param <T> the type of the task's return value.
      * @param task the task to be executed.
      * @return the object resulting from executing the task.
-     * @throws RemoteException
+     * @throws RemoteException in case communication between the client and
+     * the Remote Computer encounters some problem, 
+     * or the Computer itself does not complete its work.
      */
     public <T> T execute( Task<T> task ) throws RemoteException;
 }
