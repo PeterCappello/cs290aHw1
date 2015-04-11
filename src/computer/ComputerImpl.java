@@ -37,12 +37,13 @@ public class ComputerImpl extends UnicastRemoteObject implements Computer
             
     /**
      *
+     * @param <T> type of task.execute() return value.
      * @param task to be executed.
      * @return the return-value of the executed task.
      * @throws RemoteException
      */
     @Override
-    public Object execute(Task task) throws RemoteException 
+    public <T> T execute(Task<T> task) throws RemoteException 
     { 
         return task.call();
     }
@@ -51,7 +52,7 @@ public class ComputerImpl extends UnicastRemoteObject implements Computer
     {
         System.setSecurityManager( new SecurityManager() );
         LocateRegistry.createRegistry( Computer.PORT )
-                      .rebind( Computer.SERVICE_NAME, new ComputerImpl() );
+                      .rebind( Computer.SERVICE_NAME, (Computer) new ComputerImpl() );
         System.out.println( "Computer running." );
     }
 }

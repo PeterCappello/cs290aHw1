@@ -22,15 +22,16 @@
  * THE SOFTWARE.
  */
 package api;
-import java.rmi.Remote;
+import java.io.Serializable;
 import java.util.concurrent.Callable;
 
 /**
- *
+ * Task is an encapsulation of some computation.
  * @author Peter Cappello
  * @param <V> the task return type.
  */
-public interface Task<V> extends Remote, Callable<V> 
+public interface Task<V> extends Serializable, Callable<V> 
 { 
+    @Override
     V call(); 
 }

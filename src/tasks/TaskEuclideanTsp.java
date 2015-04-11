@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * This task computes a solution to a Euclidean TSP problem instance.
  * @author Peter Cappello
  */
 public class TaskEuclideanTsp implements Task<List<Integer>>
@@ -38,10 +38,6 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     final static Integer TWO = 2;
     
     final private double[][] cities;
-    
-    /*
-    It seems to be the case that static initializers are executed when the 1st object is loaded.
-    */
     static private double[][] distances;
     
     public TaskEuclideanTsp( double[][] cities ) 

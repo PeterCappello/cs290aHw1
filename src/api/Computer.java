@@ -22,17 +22,34 @@
  * THE SOFTWARE.
  */
 package api;
+import java.rmi.Remote;
 import java.rmi.RemoteException;
 
 /**
- *
+ * An implementation of a Computer computes (i.e., executes) tasks. 
  * @author Peter Cappello
- * @param <T> type of the Task return value.
  */
-public interface Computer<T>
+public interface Computer extends Remote
 {
-    public static int PORT = 1099;
+
+    /**
+     * The port on which the RMI registry is listening.
+     */
+    public static int    PORT = 1099;
+
+    /**
+     * The name in the RMI registry under which this service is listed.
+     */
     public static String SERVICE_NAME = "Computer";
     
-    public T execute( Task<T> task ) throws RemoteException;
+    /**
+     * Execute task.
+     * @param <T> the type of the task's return value.
+     * @param task the task to be executed.
+     * @return the object resulting from executing the task.
+     * @throws RemoteException in case communication between the client and
+     * the Remote Computer encounters some problem, 
+     * or the Computer itself does not complete its work.
+     */
+    public <T> T execute( Task<T> task ) throws RemoteException;
 }
