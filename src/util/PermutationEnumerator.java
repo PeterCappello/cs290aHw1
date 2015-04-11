@@ -24,11 +24,7 @@
 package util;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import org.paukov.combinatorics.Factory;
-import org.paukov.combinatorics.Generator;
-import org.paukov.combinatorics.ICombinatoricsVector;
 
 /**
  *
@@ -69,52 +65,6 @@ public class PermutationEnumerator<T>
     }
     
     /**
-     * Enumerates the permutations of a List of Integer objectList.
-     * Application: Guide the permutation a List or array of objectList.
-     * @param integerList - the list of Integer objectList to be permuted.
-     * @return List of permutations, each represented as a List of Integer.
-     * If p is such a permutation, then reverse(p) is omitted from returned List.
-     */
-    public List<List<Integer>> enumerate( List<Integer> integerList )
-    {
-        List<List<Integer>> permutationList = new ArrayList<>();
-
-         // Base case
-        if( integerList.isEmpty() )
-         {
-             permutationList.add( new ArrayList<>() );
-             return permutationList;
-         }
-
-         // Inductive case
-         //  1. create subproblem
-         final Integer n = integerList.remove( 0 );
-
-         //  2. solve subproblem
-         final List<List<Integer>> subPermutationList = enumerate( integerList );
-
-         //  3. solve problem using subproblem solution
-         subPermutationList.stream().forEach( subPermutation -> 
-         {            
-            //  if p is a cyclic permutation, omit reverse(p): 1 always occurs before 2 in p.
-            if ( ! n.equals( ONE ) )
-                for( int index = 0; index <= subPermutation.size(); index++ )
-                    permutationList.add( addElement( subPermutation, index, n ) );
-            else 
-               for( int index = 0; index < subPermutation.indexOf( TWO ); index++ )
-                    permutationList.add( addElement( subPermutation, index, n ) );
-        });   
-        return permutationList;
-   }
-  
-   private static List<Integer> addElement( final List<Integer> subPermutation, final int index, final Integer n )
-   {
-       List<Integer> permutation = new ArrayList<>( subPermutation );
-       permutation.add( index, n );
-       return permutation;
-   }
-    
-    /**
      * Produce the permutation permutation.
      * @return the permutation permutation as a List.
      * If none, returns null.
@@ -152,46 +102,5 @@ public class PermutationEnumerator<T>
             }
         }
         return returnValue;
-    }
-    
-    public static void main( String[] args ) throws Exception
-    {
-        List<Integer> integerList = Arrays.asList( new Integer[]{ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 } );
-        long startTime = System.nanoTime();
-        myScheme( integerList );
-//        alternative( integerList );
-        long runTime = ( System.nanoTime() - startTime ) / 1000000;
-        System.out.println( "Runtime: " + runTime  + " ms." );
-    }
-    
-    private static String listToString( List<Integer> integerList )
-    {
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append( "{ " );
-        integerList.stream().forEach((integer) -> 
-        {
-            stringBuilder.append( integer ).append( ' ' );
-        } );
-        stringBuilder.append( '}' );
-        return stringBuilder.toString();
-    }
-    
-    private static void myScheme( List<Integer> integerList )
-    {
-        PermutationEnumerator<Integer> permutationEnumerator = new PermutationEnumerator<>( integerList );
-//        int i = 0;
-        for ( ; permutationEnumerator.next() != null; ) 
-        {
-//            System.out.print        ++i + ": " + listToString( permutation) );
-//            permutation = permutationEnumerator.next();
-        }
-    }
-    
-    private static void alternative( List<Integer> integerList )
-    {
-        // Use Combinatoricslib-2.1 to generate permutations
-        ICombinatoricsVector<Integer> initialVector = Factory.createVector( integerList );
-        Generator<Integer> generator = Factory.createPermutationGenerator(initialVector);
-        for (ICombinatoricsVector<Integer> perm : generator) {}
     }
 }

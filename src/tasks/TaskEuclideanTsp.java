@@ -26,11 +26,7 @@ package tasks;
 import util.PermutationEnumerator;
 import api.Task;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import org.paukov.combinatorics.Factory;
-import org.paukov.combinatorics.Generator;
-import org.paukov.combinatorics.ICombinatoricsVector;
 
 /**
  *
@@ -43,35 +39,25 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     
     final private double[][] cities;
     
-    public TaskEuclideanTsp( double[][] cities ) { this.cities = cities; }
+    /*
+    It seems to be the case that static initializers are executed when the 1st object is loaded.
+    */
+    static private double[][] distances;
+    
+    public TaskEuclideanTsp( double[][] cities ) 
+    { 
+        this.cities = cities;
+        initializeDistances();
+    }
     
     @Override
     public List<Integer> call() 
     {
         // initial value for shortestTour and its distance.
         List<Integer> partialCityList = initialTour();
-        List<Integer> shortestTour = new LinkedList<>( partialCityList );
+        List<Integer> shortestTour = new ArrayList<>( partialCityList );
         shortestTour.add( 0, 0 );
-        double shortestTourDistance = tourDistance( cities, shortestTour );
-        
-        // Use Combinatoricslib-2.1 to generate tour suffixes
-//        ICombinatoricsVector<Integer> initialVector = Factory.createVector( partialCityList );
-//        Generator<Integer> generator = Factory.createPermutationGenerator(initialVector);
-//        for ( ICombinatoricsVector<Integer> tourSuffix : generator ) 
-//        {
-//            List<Integer> tour = tourSuffix.getVector();
-//            tour.add( 0, 0 );
-//            if ( tour.indexOf( ONE ) >  tour.indexOf( TWO ) )
-//            {
-//                continue; // skip tour; it is the reverse of another.
-//            }
-//            double tourDistance = tourDistance( cities, tour );
-//            if ( tourDistance < shortestTourDistance )
-//            {
-//                shortestTour = tour;
-//                shortestTourDistance = tourDistance;
-//            }
-//        }
+        double shortestTourDistance = tourDistance( shortestTour );
         
         // Use my permutation enumerator
         PermutationEnumerator<Integer> permutationEnumerator = new PermutationEnumerator<>( partialCityList );
@@ -83,7 +69,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
             {
                 continue; // skip tour; it is the reverse of another.
             }
-            double tourDistance = tourDistance( cities, tour );
+            double tourDistance = tourDistance( tour );
             if ( tourDistance < shortestTourDistance )
             {
                 shortestTour = tour;
@@ -93,9 +79,9 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         return shortestTour;
     }
     
-    List<Integer> initialTour()
+    private List<Integer> initialTour()
     {
-        List<Integer> tour = new LinkedList<>();
+        List<Integer> tour = new ArrayList<>();
         for ( int city = 1; city < cities.length; city++ )
         {
             tour.add( city );
@@ -117,15 +103,15 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         }
         return stringBuilder.toString();
     }
-    
-   private double tourDistance( double[][] cities, final List<Integer> tour  )
+   
+   private double tourDistance( final List<Integer> tour  )
    {
        double cost = 0.0;
        for ( int city = 0; city < tour.size() - 1; city ++ )
        {
-           cost += distance( cities[ tour.get( city ) ], cities[ tour.get( city + 1 ) ] );
+           cost += distances[ tour.get( city ) ][ tour.get( city + 1 ) ];
        }
-       return cost + distance( cities[ tour.get( tour.size() - 1 ) ], cities[ tour.get( 0 ) ] );
+       return cost + distances[ tour.get( tour.size() - 1 ) ][ tour.get( 0 ) ];
    }
    
    private static double distance( final double[] city1, final double[] city2 )
@@ -135,42 +121,13 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
        return Math.sqrt( deltaX * deltaX + deltaY * deltaY );
    }
    
-   private static List<List<Integer>> enumeratePermutations( List<Integer> numberList )
-  {
-      List<List<Integer>> permutationList = new ArrayList<>();
-      
-       // Base case
-      if( numberList.isEmpty() )
+   private void initializeDistances()
+   {
+       distances = new double[ cities.length][ cities.length];
+       for ( int i = 0; i < cities.length; i++ )
+       for ( int j = 0; j < cities.length; j++ )
        {
-           permutationList.add( new ArrayList<>() );
-           return permutationList;
+           distances[ i ][ j ] = distances[ j ][ i ] = distance( cities[ i ], cities[ j ] );
        }
-       
-       // Inductive case
-       //  1. create subproblem
-       final Integer n = numberList.remove( 0 );
-       
-       //  2. solve subproblem
-       final List<List<Integer>> subPermutationList = enumeratePermutations( numberList );
-       
-       //  3. solve problem using subproblem solution
-       subPermutationList.stream().forEach( subPermutation -> 
-       {            
-           //  if p is a cyclic permutation, omit reverse(p): 1 always occurs before 2 in p.
-           if ( ! n.equals( ONE ) )
-               for( int index = 0; index <= subPermutation.size(); index++ )
-                   permutationList.add( addElement( subPermutation, index, n ) );
-           else 
-              for( int index = 0; index < subPermutation.indexOf( TWO ); index++ )
-                   permutationList.add( addElement( subPermutation, index, n ) );
-       });   
-       return permutationList;
    }
-  
-  private static List<Integer> addElement( final List<Integer> subPermutation, final int index, final Integer n )
-  {
-       List<Integer> permutation = new ArrayList<>( subPermutation );
-       permutation.add( index, n );
-       return permutation;
-  }
 }
