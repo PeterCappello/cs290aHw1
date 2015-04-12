@@ -67,7 +67,6 @@ public class ClientEuclideanTsp extends Client<List<Integer>>
     {
         System.setSecurityManager( new SecurityManager() );
         final ClientEuclideanTsp client = new ClientEuclideanTsp();
-        client.begin();
         final List<Integer> value = client.runTask();
         client.add( client.getLabel( value.toArray( new Integer[0] ) ) );
         client.end();

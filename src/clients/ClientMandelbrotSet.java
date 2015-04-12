@@ -60,7 +60,6 @@ public class ClientMandelbrotSet extends Client<Integer[][]>
     {  
         System.setSecurityManager( new SecurityManager() );
         final ClientMandelbrotSet client = new ClientMandelbrotSet();
-        client.begin();
         Integer[][] value = client.runTask();
         client.add( client.getLabel( value ) );
         client.end();

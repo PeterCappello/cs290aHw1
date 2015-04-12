@@ -45,9 +45,8 @@ import javax.swing.JScrollPane;
 public class Client<T> extends JFrame
 {
     final protected Task<T> task;
-          final private Computer computer;
-                protected T taskReturnValue;
-                private long clientStartTime;
+    final private Computer computer;
+    final private long clientStartTime = System.nanoTime();
     
     public Client( final String title, final String domainName, final Task<T> task ) 
             throws RemoteException, NotBoundException, MalformedURLException
@@ -59,9 +58,7 @@ public class Client<T> extends JFrame
         String url = "rmi://" + domainName + ":" + Computer.PORT + "/" + Computer.SERVICE_NAME;
         computer = ( domainName == null || domainName.isEmpty() ) ? new ComputerImpl() : (Computer) Naming.lookup( url );
     }
-    
-    public void begin() { clientStartTime = System.nanoTime(); }
-    
+        
     public void end() 
     { 
         Logger.getLogger( Client.class.getCanonicalName() ).log(Level.INFO, "Client time: {0} ms.", ( System.nanoTime() - clientStartTime) / 1000000 );
