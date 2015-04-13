@@ -102,12 +102,12 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
    
    private double tourDistance( final List<Integer> tour  )
    {
-       double cost = 0.0;
+       double cost = distances[ tour.get( tour.size() - 1 ) ][ tour.get( 0 ) ];
        for ( int city = 0; city < tour.size() - 1; city ++ )
        {
            cost += distances[ tour.get( city ) ][ tour.get( city + 1 ) ];
        }
-       return cost + distances[ tour.get( tour.size() - 1 ) ][ tour.get( 0 ) ];
+       return cost;
    }
    
    private static double distance( final double[] city1, final double[] city2 )
