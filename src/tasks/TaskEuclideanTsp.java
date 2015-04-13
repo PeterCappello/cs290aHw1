@@ -121,7 +121,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
    {
        distances = new double[ cities.length][ cities.length];
        for ( int i = 0; i < cities.length; i++ )
-       for ( int j = 0; j < cities.length; j++ )
+       for ( int j = 0; j < i; j++ )
        {
            distances[ i ][ j ] = distances[ j ][ i ] = distance( cities[ i ], cities[ j ] );
        }
