@@ -43,10 +43,7 @@ public class ComputerImpl extends UnicastRemoteObject implements Computer
      * @throws RemoteException
      */
     @Override
-    public <T> T execute(Task<T> task) throws RemoteException 
-    { 
-        return task.call();
-    }
+    public <T> T execute( Task<T> task ) throws RemoteException {  return task.call(); }
     
     public static void main( String[] args ) throws Exception
     {
