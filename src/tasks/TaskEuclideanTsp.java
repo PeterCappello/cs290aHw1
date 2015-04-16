@@ -40,6 +40,10 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     final private double[][] cities;
     static private double[][] distances;
     
+    /**
+     * Construct a Task that computes a solution to this Euclidean TSP problem instance.
+     * @param cities the cities for which a minimal cost tour must be found.
+     */
     public TaskEuclideanTsp( double[][] cities ) 
     { 
         this.cities = cities;
