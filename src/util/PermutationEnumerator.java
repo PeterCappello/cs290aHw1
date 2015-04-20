@@ -25,6 +25,9 @@ package util;
 
 import java.util.ArrayList;
 import java.util.List;
+//import org.paukov.combinatorics.Factory;
+//import org.paukov.combinatorics.Generator;
+//import org.paukov.combinatorics.ICombinatoricsVector;
 
 /**
  *
@@ -63,6 +66,52 @@ public class PermutationEnumerator<T>
         subPermutationEnumerator = new PermutationEnumerator<>( subpermutation );
         subpermutation = subPermutationEnumerator.next();
     }
+    
+    /**
+     * Enumerates the permutations of a List of Integer objectList.
+     * Application: Guide the permutation a List or array of objectList.
+     * @param integerList - the list of Integer objectList to be permuted.
+     * @return List of permutations, each represented as a List of Integer.
+     * If p is such a permutation, then reverse(p) is omitted from returned List.
+     */
+    public List<List<Integer>> enumerate( List<Integer> integerList )
+    {
+        List<List<Integer>> permutationList = new ArrayList<>();
+
+         // Base case
+        if( integerList.isEmpty() )
+         {
+             permutationList.add( new ArrayList<>() );
+             return permutationList;
+         }
+
+         // Inductive case
+         //  1. create subproblem
+         final Integer n = integerList.remove( 0 );
+
+         //  2. solve subproblem
+         final List<List<Integer>> subPermutationList = enumerate( integerList );
+
+         //  3. solve problem using subproblem solution
+         subPermutationList.stream().forEach( subPermutation -> 
+         {            
+            //  if p is a cyclic permutation, omit reverse(p): 1 always occurs before 2 in p.
+            if ( ! n.equals( ONE ) )
+                for( int index = 0; index <= subPermutation.size(); index++ )
+                    permutationList.add( addElement( subPermutation, index, n ) );
+            else 
+               for( int index = 0; index < subPermutation.indexOf( TWO ); index++ )
+                    permutationList.add( addElement( subPermutation, index, n ) );
+        });   
+        return permutationList;
+   }
+  
+   private static List<Integer> addElement( final List<Integer> subPermutation, final int index, final Integer n )
+   {
+       List<Integer> permutation = new ArrayList<>( subPermutation );
+       permutation.add( index, n );
+       return permutation;
+   }
     
     /**
      * Produce the permutation permutation.
