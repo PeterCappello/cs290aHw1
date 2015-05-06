@@ -23,9 +23,9 @@
  */
 package tasks;
 
-import util.PermutationEnumerator;
 import api.Task;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -40,44 +40,84 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     final private double[][] cities;
     static private double[][] distances;
     
+    //______________________________________
+    private List<Integer> permutation;
+    private List<Integer> shortestTour;
+    private double shortestTourDistance;
+    //______________________________________
+    
     /**
      * Construct a Task that computes a solution to this Euclidean TSP problem instance.
      * @param cities the cities for which a minimal cost tour must be found.
      */
     public TaskEuclideanTsp( double[][] cities ) 
     { 
+        System.out.println("cities.length: " + cities.length );
         this.cities = cities;
         initializeDistances();
+        
+        permutation = initialTour();
+        shortestTour = new ArrayList<>( permutation );
+        shortestTour.add( 0, 0 );
+        shortestTourDistance = tourDistance( shortestTour );
+    }
+    
+    private void enumeratePermutations( List<Integer> permutation, int k )
+    {
+        for( int i = k; i < permutation.size(); i++ )
+        {
+            Collections.swap( permutation, i, k );
+            enumeratePermutations( permutation, k + 1 );
+            Collections.swap( permutation, k, i );
+        }
+        if ( k == permutation.size() - 1 )
+        {
+            permutation.add( 0, 0 );
+            double tourDistance = tourDistance( permutation );
+            if ( tourDistance < shortestTourDistance )
+            {
+                shortestTour = new ArrayList<>( permutation );
+                shortestTourDistance = tourDistance;
+            }
+            permutation.remove( 0 );
+        }
     }
     
     @Override
     public List<Integer> call() 
-    {
-        // initial value for shortestTour and its distance.
-        List<Integer> partialCityList = initialTour();
-        List<Integer> shortestTour = new ArrayList<>( partialCityList );
-        shortestTour.add( 0, 0 );
-        double shortestTourDistance = tourDistance( shortestTour );
-        
-        // Use my permutation enumerator
-        PermutationEnumerator<Integer> permutationEnumerator = new PermutationEnumerator<>( partialCityList );
-        for ( List<Integer> subtour = permutationEnumerator.next(); subtour != null; subtour = permutationEnumerator.next() ) 
-        {
-            List<Integer> tour = new ArrayList<>( subtour );
-            tour.add( 0, 0 );
-            if ( tour.indexOf( ONE ) >  tour.indexOf( TWO ) )
-            {
-                continue; // skip tour; it is the reverse of another.
-            }
-            double tourDistance = tourDistance( tour );
-            if ( tourDistance < shortestTourDistance )
-            {
-                shortestTour = tour;
-                shortestTourDistance = tourDistance;
-            }
-        }
+    {           
+        enumeratePermutations( permutation, 0 );
         return shortestTour;
     }
+    
+//    @Override
+//    public List<Integer> call() 
+//    {
+//        // initial value for shortestTour and its distance.
+//        List<Integer> partialCityList = initialTour();
+//        List<Integer> shortestTour = new ArrayList<>( partialCityList );
+//        shortestTour.add( 0, 0 );
+//        double shortestTourDistance = tourDistance( shortestTour );
+//               
+//        // Use my permutation enumerator
+//        PermutationEnumerator<Integer> permutationEnumerator = new PermutationEnumerator<>( partialCityList );
+//        for ( List<Integer> subtour = permutationEnumerator.next(); subtour != null; subtour = permutationEnumerator.next() ) 
+//        {
+//            List<Integer> tour = new ArrayList<>( subtour );
+//            tour.add( 0, 0 );
+//            if ( tour.indexOf( ONE ) >  tour.indexOf( TWO ) )
+//            {
+//                continue; // skip tour; it is the reverse of another.
+//            }
+//            double tourDistance = tourDistance( tour );
+//            if ( tourDistance < shortestTourDistance )
+//            {
+//                shortestTour = tour;
+//                shortestTourDistance = tourDistance;
+//            }
+//        }
+//        return shortestTour;
+//    }
     
     private List<Integer> initialTour()
     {
