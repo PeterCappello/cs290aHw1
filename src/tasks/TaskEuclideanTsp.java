@@ -34,9 +34,7 @@ import java.util.List;
  */
 public class TaskEuclideanTsp implements Task<List<Integer>>
 {
-    static final private Integer ONE = 1;
-    static final private Integer TWO = 2;
-    static       private double[][] distances;
+    static private double[][] distances;
     
     final private double[][] cities;
     final private List<Integer> permutation;
