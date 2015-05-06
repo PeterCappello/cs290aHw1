@@ -34,17 +34,14 @@ import java.util.List;
  */
 public class TaskEuclideanTsp implements Task<List<Integer>>
 {
-    final static Integer ONE = 1;
-    final static Integer TWO = 2;
+    static final private Integer ONE = 1;
+    static final private Integer TWO = 2;
+    static       private double[][] distances;
     
     final private double[][] cities;
-    static private double[][] distances;
-    
-    //______________________________________
-    private List<Integer> permutation;
-    private List<Integer> shortestTour;
-    private double shortestTourDistance;
-    //______________________________________
+    final private List<Integer> permutation;
+          private List<Integer> shortestTour;
+          private double shortestTourDistance;
     
     /**
      * Construct a Task that computes a solution to this Euclidean TSP problem instance.
@@ -89,35 +86,6 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         enumeratePermutations( permutation, 0 );
         return shortestTour;
     }
-    
-//    @Override
-//    public List<Integer> call() 
-//    {
-//        // initial value for shortestTour and its distance.
-//        List<Integer> partialCityList = initialTour();
-//        List<Integer> shortestTour = new ArrayList<>( partialCityList );
-//        shortestTour.add( 0, 0 );
-//        double shortestTourDistance = tourDistance( shortestTour );
-//               
-//        // Use my permutation enumerator
-//        PermutationEnumerator<Integer> permutationEnumerator = new PermutationEnumerator<>( partialCityList );
-//        for ( List<Integer> subtour = permutationEnumerator.next(); subtour != null; subtour = permutationEnumerator.next() ) 
-//        {
-//            List<Integer> tour = new ArrayList<>( subtour );
-//            tour.add( 0, 0 );
-//            if ( tour.indexOf( ONE ) >  tour.indexOf( TWO ) )
-//            {
-//                continue; // skip tour; it is the reverse of another.
-//            }
-//            double tourDistance = tourDistance( tour );
-//            if ( tourDistance < shortestTourDistance )
-//            {
-//                shortestTour = tour;
-//                shortestTourDistance = tourDistance;
-//            }
-//        }
-//        return shortestTour;
-//    }
     
     private List<Integer> initialTour()
     {
