@@ -75,6 +75,7 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
             processPermutation( permutation );
         }
     }
+    
     private void processPermutation( List<Integer> permutation )
     {
         permutation.add( 0, 0 );
