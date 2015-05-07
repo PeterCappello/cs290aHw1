@@ -25,8 +25,8 @@ package tasks;
 
 import api.Task;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+import util.Permutation;
 
 /**
  * This task computes a solution to a Euclidean TSP problem instance.
@@ -58,34 +58,20 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
     @Override
     public List<Integer> call() 
     {           
-        enumeratePermutations( permutation, 0 );
+        Permutation.iterate( permutation, 0, p -> consumePermutation( p ) );
         return shortestTour;
     }
     
-    private void enumeratePermutations( List<Integer> permutation, int k )
-    {
-        for( int i = k; i < permutation.size(); i++ )
-        {
-            Collections.swap( permutation, i, k );
-            enumeratePermutations( permutation, k + 1 );
-            Collections.swap( permutation, k, i );
-        }
-        if ( k == permutation.size() - 1 )
-        {
-            processPermutation( permutation );
-        }
-    }
-    
-    private void processPermutation( List<Integer> permutation )
+    private void consumePermutation( final List<Integer> permutation )
     {
         permutation.add( 0, 0 );
-            double tourDistance = tourDistance( permutation );
-            if ( tourDistance < shortestTourDistance )
-            {
-                shortestTour = new ArrayList<>( permutation );
-                shortestTourDistance = tourDistance;
-            }
-            permutation.remove( 0 );
+        double tourDistance = tourDistance( permutation );
+        if ( tourDistance < shortestTourDistance )
+        {
+            shortestTour = new ArrayList<>( permutation );
+            shortestTourDistance = tourDistance;
+        }
+        permutation.remove( 0 );
     }
     
     private List<Integer> initialTour()
