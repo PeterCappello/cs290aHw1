@@ -47,14 +47,19 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
      */
     public TaskEuclideanTsp( double[][] cities ) 
     { 
-        System.out.println("cities.length: " + cities.length );
         this.cities = cities;
         initializeDistances();
-        
         permutation = initialTour();
         shortestTour = new ArrayList<>( permutation );
         shortestTour.add( 0, 0 );
         shortestTourDistance = tourDistance( shortestTour );
+    }
+    
+    @Override
+    public List<Integer> call() 
+    {           
+        enumeratePermutations( permutation, 0 );
+        return shortestTour;
     }
     
     private void enumeratePermutations( List<Integer> permutation, int k )
@@ -67,7 +72,12 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
         }
         if ( k == permutation.size() - 1 )
         {
-            permutation.add( 0, 0 );
+            processPermutation( permutation );
+        }
+    }
+    private void processPermutation( List<Integer> permutation )
+    {
+        permutation.add( 0, 0 );
             double tourDistance = tourDistance( permutation );
             if ( tourDistance < shortestTourDistance )
             {
@@ -75,14 +85,6 @@ public class TaskEuclideanTsp implements Task<List<Integer>>
                 shortestTourDistance = tourDistance;
             }
             permutation.remove( 0 );
-        }
-    }
-    
-    @Override
-    public List<Integer> call() 
-    {           
-        enumeratePermutations( permutation, 0 );
-        return shortestTour;
     }
     
     private List<Integer> initialTour()
