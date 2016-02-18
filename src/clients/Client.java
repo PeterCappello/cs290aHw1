@@ -48,15 +48,21 @@ public class Client<T> extends JFrame
     final private Computer computer;
     final private long clientStartTime = System.nanoTime();
     
-    public Client( final String title, final String domainName, final Task<T> task ) 
+    public Client( final String domainName, final Task<T> task ) 
             throws RemoteException, NotBoundException, MalformedURLException
     {     
         this.task = task;
-        setTitle( title );
-        setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+        //setTitle( title );
+        //setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
         
         String url = "rmi://" + domainName + ":" + Computer.PORT + "/" + Computer.SERVICE_NAME;
         computer = ( domainName == null || domainName.isEmpty() ) ? new ComputerImpl() : (Computer) Naming.lookup( url );
+    }
+    
+    void init( final String title )
+    {
+        this.setTitle( title );
+        setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     }
         
     public void end() 

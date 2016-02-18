@@ -59,13 +59,14 @@ public class ClientEuclideanTsp extends Client<List<Integer>>
     
     public ClientEuclideanTsp() throws RemoteException, NotBoundException, MalformedURLException
     { 
-        super( "Euclidean TSP", "", new TaskEuclideanTsp( CITIES ) );
+        super( "", new TaskEuclideanTsp( CITIES ) );
     }
     
     public static void main( String[] args ) throws Exception
     {
         System.setSecurityManager( new SecurityManager() );
         final ClientEuclideanTsp client = new ClientEuclideanTsp();
+        client.init( "Euclidean TSP" );
         final List<Integer> value = client.runTask();
         client.add( client.getLabel( value.toArray( new Integer[0] ) ) );
         client.end();
@@ -136,8 +137,7 @@ public class ClientEuclideanTsp extends Client<List<Integer>>
                                y - VERTEX_DIAMETER/2,
                               VERTEX_DIAMETER, VERTEX_DIAMETER);
         }
-        final ImageIcon imageIcon = new ImageIcon( image );
-        return new JLabel( imageIcon );
+        return new JLabel( new ImageIcon( image ) );
     }
     
     private String tourToString( Integer[] cities )

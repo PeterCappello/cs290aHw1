@@ -47,7 +47,7 @@ public class ClientMandelbrotSet extends Client<Integer[][]>
     
     public ClientMandelbrotSet() throws RemoteException, NotBoundException, MalformedURLException 
     { 
-        super( "Mandelbrot Set Visualizer", "" /*localhost"*/,
+        super( "" /*localhost"*/,
                new TaskMandelbrotSet( LOWER_LEFT_X, LOWER_LEFT_Y, EDGE_LENGTH, N_PIXELS, ITERATION_LIMIT) ); 
     }
     
@@ -60,6 +60,7 @@ public class ClientMandelbrotSet extends Client<Integer[][]>
     {  
         System.setSecurityManager( new SecurityManager() );
         final ClientMandelbrotSet client = new ClientMandelbrotSet();
+        client.init( "Mandelbrot Set Visualizer" );
         Integer[][] value = client.runTask();
         client.add( client.getLabel( value ) );
         client.end();
@@ -75,8 +76,7 @@ public class ClientMandelbrotSet extends Client<Integer[][]>
                 graphics.setColor( getColor( counts[i][j] ) );
                 graphics.fillRect( i, N_PIXELS - j, 1, 1 );
             }
-        final ImageIcon imageIcon = new ImageIcon( image );
-        return new JLabel( imageIcon );
+        return new JLabel( new ImageIcon( image ) );
     }
     
     private Color getColor( int iterationCount )
