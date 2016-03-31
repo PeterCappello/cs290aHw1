@@ -45,10 +45,12 @@ public class ClientMandelbrotSet extends Client<Integer[][]>
     private static final int N_PIXELS = 512;
     private static final int ITERATION_LIMIT = 64;
     
-    public ClientMandelbrotSet() throws RemoteException, NotBoundException, MalformedURLException 
+    public ClientMandelbrotSet() throws RemoteException, NotBoundException, 
+                                        MalformedURLException 
     { 
-        super( "" /*localhost"*/,
-               new TaskMandelbrotSet( LOWER_LEFT_X, LOWER_LEFT_Y, EDGE_LENGTH, N_PIXELS, ITERATION_LIMIT) ); 
+        super( "" /* "localhost" */,
+               new TaskMandelbrotSet( LOWER_LEFT_X, LOWER_LEFT_Y, EDGE_LENGTH, 
+                                      N_PIXELS, ITERATION_LIMIT) ); 
     }
     
     /**
@@ -63,7 +65,6 @@ public class ClientMandelbrotSet extends Client<Integer[][]>
         client.init( "Mandelbrot Set Visualizer" );
         Integer[][] value = client.runTask();
         client.add( client.getLabel( value ) );
-        client.end();
     }
     
     public JLabel getLabel( Integer[][] counts )

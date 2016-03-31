@@ -46,28 +46,21 @@ public class Client<T> extends JFrame
 {
     final protected Task<T> task;
     final private Computer computer;
-    final private long clientStartTime = System.nanoTime();
     
     public Client( final String domainName, final Task<T> task ) 
             throws RemoteException, NotBoundException, MalformedURLException
     {     
-        this.task = task;
-        //setTitle( title );
-        //setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-        
-        String url = "rmi://" + domainName + ":" + Computer.PORT + "/" + Computer.SERVICE_NAME;
-        computer = ( domainName == null || domainName.isEmpty() ) ? new ComputerImpl() : (Computer) Naming.lookup( url );
+        this.task = task;        
+        String url = "rmi://" + domainName + ":" + Computer.PORT 
+                   + "/" + Computer.SERVICE_NAME;
+        computer = domainName == null || domainName.isEmpty()
+                 ? new ComputerImpl() : (Computer) Naming.lookup( url );
     }
     
     void init( final String title )
     {
         this.setTitle( title );
         setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-    }
-        
-    public void end() 
-    { 
-        Logger.getLogger( Client.class.getCanonicalName() ).log(Level.INFO, "Client time: {0} ms.", ( System.nanoTime() - clientStartTime) / 1000000 );
     }
     
     public void add( final JLabel jLabel )
@@ -84,7 +77,9 @@ public class Client<T> extends JFrame
         final long taskStartTime = System.nanoTime();
         final T value = computer.execute( task );
         final long taskRunTime = ( System.nanoTime() - taskStartTime ) / 1000000;
-        Logger.getLogger( Client.class.getCanonicalName() ).log(Level.INFO, "Task {0}Task time: {1} ms.", new Object[]{ task, taskRunTime } );
+        Logger.getLogger( Client.class.getCanonicalName() )
+              .log( Level.INFO, "Task {0}Task time: {1} ms.", 
+                    new Object[]{ task, taskRunTime } );
         return value;
     }
 }
