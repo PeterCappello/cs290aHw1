@@ -72,8 +72,7 @@ public class TaskMandelbrotSet implements Task<Integer[][]>
         final Integer[][] counts = new Integer[numPixels][numPixels];
         final double delta = edgeLength / numPixels;
         for ( int row = 0; row < numPixels; row++ )
-            for ( int col = 0; col < numPixels; col++ )
-            {
+            for ( int col = 0; col < numPixels; col++ ) {
                 counts[row][col] = getIterationCount( row, col, delta );
             }
         return counts;

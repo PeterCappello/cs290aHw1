@@ -37,7 +37,7 @@ public class Permutation<T>
     /**
      * Permute the elements of the List of Integers, starting from element k.
      * @param permutation the List of Integers to be permuted.
-     * @param k index of element of the sublist to be permuted.
+     * @param k index of the leftmost element of the sublist to be permuted.
      * @param consumer a Consumer that takes the List of Integers, permutation, as its parameter.
      */
     final static public void iterate( final List<Integer> permutation, final int k, final Consumer<List<Integer>> consumer )

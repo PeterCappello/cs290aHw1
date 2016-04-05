@@ -29,7 +29,7 @@ import java.rmi.server.UnicastRemoteObject;
 
 /**
  *
- * @author peter
+ * @author Peter Cappello
  */
 public class ComputerImpl extends UnicastRemoteObject implements Computer
 {
