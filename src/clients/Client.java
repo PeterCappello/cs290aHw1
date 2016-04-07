@@ -54,7 +54,8 @@ public class Client<T> extends JFrame
         String url = "rmi://" + domainName + ":" + Computer.PORT 
                    + "/" + Computer.SERVICE_NAME;
         computer = domainName == null || domainName.isEmpty()
-                 ? new ComputerImpl() : (Computer) Naming.lookup( url );
+                 ? new ComputerImpl() 
+                 : (Computer) Naming.lookup( url );
     }
     
     void init( final String title )
