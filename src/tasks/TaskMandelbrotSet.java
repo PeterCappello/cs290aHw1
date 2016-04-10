@@ -23,6 +23,7 @@
  */
 package tasks;
 import api.Task;
+import util.Complex;
 
 /**
  * This task computes the integer counts, 
@@ -95,6 +96,22 @@ public class TaskMandelbrotSet implements Task<Integer[][]>
             double xtemp = x*x - y*y + x0;
             y = 2*x*y + y0;
             x = xtemp;
+        }
+        return iteration;
+    }
+    
+//    private int getIterationCount( int row, int col, double delta )
+//    {
+//        final double x = lowerLeftX + row * delta;
+//        final double y = lowerLeftY + col * delta;
+//        return getIterationCount( x, y );
+//    }
+    
+    private int getIterationCount( double x, double y ) {
+        Complex c = new Complex( x, y );
+        int iteration = 0;
+        for ( Complex z = new Complex( x, y ); z.sizeSquared() <= 4.0 && iteration < iterationLimit; iteration++ ) {
+            z.square().add( c );
         }
         return iteration;
     }
