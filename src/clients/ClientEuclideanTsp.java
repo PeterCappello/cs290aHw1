@@ -79,16 +79,16 @@ public class ClientEuclideanTsp extends Client<List<Integer>>
         // get minX, maxX, minY, maxY, assuming they 0.0 <= mins
         double minX = CITIES[0][0], maxX = CITIES[0][0];
         double minY = CITIES[0][1], maxY = CITIES[0][1];
-        for ( double[] cities : CITIES ) 
+        for ( double[] city : CITIES ) 
         {
-            if ( cities[0] < minX ) 
-                minX = cities[0];
-            if ( cities[0] > maxX ) 
-                maxX = cities[0];
-            if ( cities[1] < minY ) 
-                minY = cities[1];
-            if ( cities[1] > maxY ) 
-                maxY = cities[1];
+            if ( city[0] < minX ) 
+                minX = city[0];
+            if ( city[0] > maxX ) 
+                maxX = city[0];
+            if ( city[1] < minY ) 
+                minY = city[1];
+            if ( city[1] > maxY ) 
+                maxY = city[1];
         }
 
         // scale points to fit in unit square
@@ -104,7 +104,8 @@ public class ClientEuclideanTsp extends Client<List<Integer>>
         final Graphics graphics = image.getGraphics();
 
         final int margin = 10;
-        final int field = NUM_PIXALS - 2*margin;
+        final int field = NUM_PIXALS - 2 * margin;
+        
         // draw edges
         graphics.setColor( Color.BLUE );
         int x1, y1, x2, y2;
