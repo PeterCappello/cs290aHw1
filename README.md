@@ -1,2 +1,2 @@
 # cs290aHw1
-CS 290A - homework 1
+CS 190B - homework 1

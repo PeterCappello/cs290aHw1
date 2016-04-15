@@ -100,6 +100,9 @@
     <!-- Make computer jar file -->
     <jar jarfile="${dist}/computer.jar" basedir="${build}" includes="computer/** api/**"/>
     
+    <!-- Make jar for project submission file -->
+    <jar jarfile="${dist}/cappello.jar" basedir="." includes="src/** documents/** build.xml policy" />
+    
   </target>
   
   <target name="myjavadoc" depends="mycompile" description="create javadocs">

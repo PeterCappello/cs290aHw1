@@ -86,26 +86,26 @@ public class TaskMandelbrotSet implements Task<Integer[][]>
                 getClass(), lowerLeftX, lowerLeftY, edgeLength, numPixels, iterationLimit );
     }
     
-    private int getIterationCount( int row, int col, double delta )
-    {
-        final double x0 = lowerLeftX + row * delta;
-        final double y0 = lowerLeftY + col * delta;
-        int iteration = 0;
-        for ( double x = x0, y = y0; x*x + y*y <= 4.0 && iteration < iterationLimit; iteration++ )
-        {
-            double xtemp = x*x - y*y + x0;
-            y = 2*x*y + y0;
-            x = xtemp;
-        }
-        return iteration;
-    }
-    
 //    private int getIterationCount( int row, int col, double delta )
 //    {
-//        final double x = lowerLeftX + row * delta;
-//        final double y = lowerLeftY + col * delta;
-//        return getIterationCount( x, y );
+//        final double x0 = lowerLeftX + row * delta;
+//        final double y0 = lowerLeftY + col * delta;
+//        int iteration = 0;
+//        for ( double x = x0, y = y0; x*x + y*y <= 4.0 && iteration < iterationLimit; iteration++ )
+//        {
+//            double xtemp = x*x - y*y + x0;
+//            y = 2*x*y + y0;
+//            x = xtemp;
+//        }
+//        return iteration;
 //    }
+    
+    private int getIterationCount( int row, int col, double delta )
+    {
+        final double x = lowerLeftX + row * delta;
+        final double y = lowerLeftY + col * delta;
+        return getIterationCount( x, y );
+    }
     
     private int getIterationCount( double x, double y ) {
         Complex c = new Complex( x, y );
